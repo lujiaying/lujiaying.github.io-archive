@@ -10,16 +10,13 @@ tags: [IFTTT, Facebook, 科学上网, 社交]
 1. 借助[IFTTT][1]，我把新浪微博、instagram上的新动态自动更新到Facebook上。
 ![If instagram then facebook](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_instagram_then_facebook.png)
 效果如下：
-![Facebook](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1_facebook.png)
-![Weibo](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1_weibo.png)
+![Cool](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1.png)
 
 2. 把[Pocket][2]上的加星文章同步到Onenote，并分享到新浪微博和Facebook。
 <!-- more -->
 ![If Pocket then Onenote](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_pocket_then_onenote.png)
-![If Pocket then Weibo](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_pocket_then_weibo.png)
 效果如下：
-![Onenote](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2_onenote.png)
-![Weibo](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2_weibo.png)
+![Awesome~](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2.png)
 
 我的终极设想是以新浪微博作为中心，同步所有社交网络上的动态：
 - 豆瓣上看过的书、电影
