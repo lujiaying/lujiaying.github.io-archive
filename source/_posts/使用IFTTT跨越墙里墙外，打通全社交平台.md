@@ -9,11 +9,11 @@ tags: [IFTTT, Facebook, 科学上网, 社交]
 ============
 1. 借助[IFTTT][1]，我把新浪微博、instagram上的新动态自动更新到Facebook上。
 ![If instagram then facebook](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_instagram_then_facebook.png)
+<!-- more -->
 效果如下：
 ![Cool](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1.png)
 
 2. 把[Pocket][2]上的加星文章同步到Onenote，并分享到新浪微博和Facebook。
-<!-- more -->
 ![If Pocket then Onenote](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_pocket_then_onenote.png)
 效果如下：
 ![Awesome~](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2.png)
