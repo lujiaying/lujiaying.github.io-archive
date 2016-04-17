@@ -6,6 +6,7 @@ My Blog
 ```branch master``` store deploy files.
 
 ## 操作指南
+以下操作均在source分支下进行
 
 新建一篇文章
 `$ hexo new <title>`
@@ -15,3 +16,6 @@ My Blog
 
 本地服务器预览,默认端口4000
 `$ hexo server`
+
+部署到服务器
+`$hexo deploy`
