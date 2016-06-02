@@ -161,5 +161,6 @@ General notes on the underlying Mersenne Twister core generator:
 * 线性同余生成器算法在2000个点时与Python Random标准库提供的Wichmann-Hill、Mersenne Twister算法性能差距不大。
 
 ## 拓展阅读
-Random 标准库`shuffle(), choice()` 函数原理分析（计划写作中）
-[伪随机的上位和真随机的逆袭](http://blog.jobbole.com/83187/)
+* Random 标准库`shuffle(), choice()` 函数原理分析（计划写作中）
+* [伪随机的上位和真随机的逆袭](https://zhuanlan.zhihu.com/p/19930815)
+* [Random.org](https://www.random.org/): 通过大气噪音 (Atmospheric Noise) 这种大自然的随机现象来产生最优质最科学最随机的随机数生成及衍生服务。他们提供的免费服务包括：随机数、数组、字符、序列生成，随机正态分布生成，机选彩票，抛硬币，掷色子，洗牌器，随机打乱顺序，随机生成时间、日期、密码、地理坐标、DNA序列、纯净白噪音等等，从娱乐到学术都有。当然他们还有付费服务：第三方认证的抽签，为非常重要的抽签提供最高纯度的随机性。
