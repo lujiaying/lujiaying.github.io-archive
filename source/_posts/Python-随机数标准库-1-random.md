@@ -30,10 +30,12 @@ Python random包可以用来生成随机数。随机数不仅可以用于数学�
 
 好的伪随机数算法和差的具有天壤之别，其中差别之大用肉眼就可以观测到：
 
-![C#的System.Random类生成的随机数填充的位图](http://upload-images.jianshu.io/upload_images/49499-aa8b18c86907b685.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![C#的System.Random类生成的随机数填充的位图](http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FC%23%E7%9A%84System.Random%E7%B1%BB%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png)
+*C#的System.Random类生成的随机数填充的位图*
 
-![php的rand函数生成的随机数填充的位图](http://upload-images.jianshu.io/upload_images/49499-734e9a683818234f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
+![php的rand函数生成的随机数填充的位图](http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2Fphp%E7%9A%84rand%E5%87%BD%E6%95%B0%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png)
+*php的rand函数生成的随机数填充的位图*
 
 ## 常用的随机数算法
 #### 线性同余
@@ -147,15 +149,16 @@ General notes on the underlying Mersenne Twister core generator:
   and is, therefore, threadsafe.
 ```
 
+
 ## 性能比较
 
-![随机数散点图](http://upload-images.jianshu.io/upload_images/49499-c2fea1c2b099ac20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![随机数散点图](http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2F%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%95%A3%E7%82%B9%E5%9B%BE.png)
 
 根据随机数算法生成一组坐标(x,y)，使用[pylab](http://matplotlib.org/)绘制其在二维坐标系上的散点图。
 上图的四个子图分别由不同的算法生成的**2000**个点绘制，散点图的特点是相同点数不堆积只绘制一次，因此在坐标轴上点数越多、分布越均匀代表算法性能越优秀。
 可发现：
 * 平方取中算法较其他算法出现了明显的稀疏分布，即算法在2000个点时已命中循环长度。
-* 而线性同余生成器算法在2000个点时与Python Random标准库提供的Wichmann-Hill、Mersenne Twister算法性能差距不大。
+* 线性同余生成器算法在2000个点时与Python Random标准库提供的Wichmann-Hill、Mersenne Twister算法性能差距不大。
 
 ## 拓展阅读
 Random 标准库`shuffle(), choice()` 函数原理分析（计划写作中）
