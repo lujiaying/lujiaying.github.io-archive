@@ -1,6 +1,6 @@
 title: Python 随机数标准库(2) -- shuffle()
 date: 2016-08-18 23:56:04
-tags:
+tags: [Python, random, Math, 随机数, 数学, 算法, 技术笔记]
 ---
 Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的[numpy](http://www.numpy.org/)和[scipy](http://www.scipy.org/)项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。
 
