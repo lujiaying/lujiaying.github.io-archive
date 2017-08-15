@@ -19,3 +19,9 @@ My Blog
 
 部署到服务器
 `$hexo deploy`
+
+## 配置指南
+```
+cd themes
+git clone https://github.com/lujiaying/hexo-theme-yilia yilia
+```
