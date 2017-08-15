@@ -1,6 +1,6 @@
 title: MovieTaster-使用Item2Vec做电影推荐
 date: 2017-08-15 17:37:38
-tags: 深度学习,词向量,word2vec
+tags: [深度学习, 词向量, word2vec, 技术笔记]
 ---
 
 ## 前言
@@ -17,10 +17,11 @@ tags: 深度学习,词向量,word2vec
 ![MovieTaster-demo-输入多个电影](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png)
 *MovieTaster-demo-输入多个电影*
 
+<!-- more -->
+
 ![MovieTaster-demo-输入单个电影](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_one.png)
 *MovieTaster-demo-输入单个电影*
 
-<!-- more -->
 
 ## Item2Vec
 
