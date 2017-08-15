@@ -3,14 +3,14 @@ date: 2017-08-15 17:37:38
 tags: 深度学习,词向量,word2vec
 ---
 
-##前言
+## 前言
 
 自从Mikolov在他2013年的论文“[Efficient Estimation of Word Representation in Vector Space](https://arxiv.org/abs/1301.3781)”[1]提出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。词向量基于语言模型的假设——“一个词的含义可以由它的上下文推断得出“，提出了词的Distributed Representation表示方法。相较于传统NLP的高维、稀疏的表示法(One-hot Representation)，Word2Vec训练出的词向量是低维、稠密的。Word2Vec利用了词的上下文信息，语义信息更加丰富，目前常见的应用有：
 1. 使用训练出的词向量作为输入特征，提升现有系统，如应用在情感分析、词性标注、语言翻译等神经网络中的输入层。
 2. 直接从语言学的角度对词向量进行应用，如使用向量的距离表示词语相似度、query相关性等。
 
 
-##MovieTaster
+## MovieTaster
 
 [MovieTaster](https://movietaster.leanapp.cn/movies/)是我用Item2Vec实现的电影推荐demo，它可以针对输入的一个或多个电影，基于[豆瓣](https://www.douban.com/)用户UGC内容(豆列)产生推荐列表。
 
@@ -22,7 +22,7 @@ tags: 深度学习,词向量,word2vec
 
 <!-- more -->
 
-##Item2Vec
+## Item2Vec
 
 [MovieTaster](https://movietaster.leanapp.cn/movies/)是Item2Vec在电影推荐上的实现，下面简单介绍一下Item2Vec的内容。
 Item2Vec是由O Barkan，N Koenigstein在他们2016年的论文“[Item2Vec: Neural Item Embedding for Collaborative Filtering](https://arxiv.org/abs/1603.04259)“[3]中提出的。论文把Word2vec的Skipgram with Negative Sampling (SGNS)的算法思路迁移到基于物品的协同过滤(item-based CF)上，以物品的共现性作为自然语言中的上下文关系，构建神经网络学习出物品在隐空间的向量表示。论文中还比较了Item2Vec和SVD在微软Xbox音乐推荐服务和Windows 10商店的商品推荐的效果，结果显示Item2Vec效果有所提升。
@@ -36,7 +36,9 @@ Item2Vec的网络结构与Word2Vec Skipgram的结构基本一致，只是输入�
 (1) 把Word2Vec的上下文窗口(window size)由定长的修改为变长的，长度由当前训练的物品集合长度决定。此方法需要修改网络结构。
 (2) 不修改网络结构，而在训练神经网络时对物品集合做shuffle操作，变相地起到忽略序列带来对影响。
 论文提出两种方法的实验效果基本一致。
-MovieTaster是如何实现的
+
+
+## MovieTaster是如何实现的
 
 MovieTaster的训练数据(我爬的)是豆友们的电影豆列共6万个，其中包括10万＋部电影。训练item向量使用的工具是fasttext，训练方式是skipgram、50个epoch，并滤去出现次数低于10次的电影。
 我还尝试了其它训练参数，推荐结果如下：
@@ -48,7 +50,7 @@ MovieTaster的训练数据(我爬的)是豆友们的电影豆列共6万个，其
 大家关于Item2Vec有什么脑洞，欢迎讨论。文章后续会公开部分源码和数据集，并尝试更多不同算法和参数的效果。
 
 
-####参考资料：
+#### 参考资料：
 
 [1] Mikolov T, Chen K, Corrado G, et al. Efficient Estimation of Word Representations in Vector Space[J]. Computer Science, 2013.
 [2] [word2vec 中的数学原理详解](http://blog.csdn.net/itplus/article/details/37969519)

@@ -22,6 +22,7 @@ My Blog
 
 ## 配置指南
 ```
+npm install
 cd themes
 git clone https://github.com/lujiaying/hexo-theme-yilia yilia
 ```
