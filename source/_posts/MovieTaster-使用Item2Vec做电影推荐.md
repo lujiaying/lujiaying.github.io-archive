@@ -12,7 +12,7 @@ tags: [深度学习, 词向量, word2vec, 技术笔记]
 
 ## MovieTaster
 
-[MovieTaster](https://movietaster.leanapp.cn/movies/)是我用Item2Vec实现的电影推荐demo，它可以针对输入的一个或多个电影，基于[豆瓣](https://www.douban.com/)用户UGC内容(豆列)产生推荐列表。
+[MovieTaster](https://movietaster.leanapp.cn/movies/)是我用Item2Vec实现的电影推荐demo，它可以针对输入的一个或多个电影，基于[豆瓣](https://www.douban.com/)用户UGC内容(豆列)产生推荐列表。[Github Repo](https://github.com/lujiaying/MovieTaster-Open)
 
 ![MovieTaster-demo-输入多个电影](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png)
 *MovieTaster-demo-输入多个电影*
@@ -48,7 +48,7 @@ MovieTaster的训练数据(我爬的)是豆友们的电影豆列共6万个，其
 *skipgram-vs-cbow*
 
 从结果中可以观察出一些有意思的结论。战狼2是最近刚出的电影(此文作于2017/08)，包含战狼2的大多是“暑期国产电影合集”，“2017年不得不看的国产电影“这类豆列；美国往事属于经典老片，训练语料足够多，skipgram和cbow的推荐结果各有千秋；小时代在豆瓣中属于不受待见的一类电影，包含小时代的豆列较少，skipgram的推荐结果优于cbow。
-大家关于Item2Vec有什么脑洞，欢迎讨论。文章后续会公开部分源码和数据集，并尝试更多不同算法和参数的效果。
+大家关于Item2Vec有什么脑洞，欢迎讨论。文章后续会公开部分[源码和数据集](https://github.com/lujiaying/MovieTaster-Open)，并尝试更多不同算法和参数的效果。
 
 
 #### 参考资料：
