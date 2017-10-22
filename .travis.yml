@@ -11,7 +11,7 @@ before_install:
 - npm install -g hexo-cli
 
 install:
-- npm install hexo-renderer-mathjax --save
+#- npm install hexo-renderer-mathjax --save
 - npm install
 
 before_script:

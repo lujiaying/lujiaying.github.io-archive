@@ -62,8 +62,8 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: http://hexo.io/plugins/
-plugins:
-- hexo-renderer-mathjax
+#plugins:
+#- hexo-renderer-mathjax
 ## Themes: http://hexo.io/themes/
 theme: yilia
 
