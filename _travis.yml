@@ -1,0 +1,28 @@
+language: node_js
+
+node_js: stable
+
+branches:
+  only:
+  - source
+
+before_install:
+- npm install -g hexo
+- npm install -g hexo-cli
+
+install:
+- npm install
+
+before_script:
+- git clone https://github.com/lujiaying/hexo-theme-yilia.git themes/yilia
+
+script:
+- hexo clean
+- hexo generate
+
+after_success:
+- cd ./public
+- git init
+- git add --all .
+- git commit -m "Travis CI Auto Builder"
+- git push --quiet --force https://${GITHUB_TOKEN}@github.com:lujiaying/lujiaying.github.io.git master
