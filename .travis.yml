@@ -9,9 +9,9 @@ branches:
 before_install:
 - npm install -g hexo
 - npm install -g hexo-cli
-- npm install hexo-math --save
 
 install:
+- npm install hexo-math --save
 - npm install
 
 before_script:
