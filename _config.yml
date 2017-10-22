@@ -62,17 +62,21 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: http://hexo.io/plugins/
-plugins:
-- hexo-renderer-mathjax
 ## Themes: http://hexo.io/themes/
 theme: yilia
+math:
+    engine: 'mathjax' # or 'katex'
+    mathjax:
+      src: custom_mathjax_source
+      config:
+      # MathJax config
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type: git
-  repo: git@github.com:lujiaying/lujiaying.github.io.git
-  branch: master
+    type: git
+    repo: git@github.com:lujiaying/lujiaying.github.io.git
+    branch: master
 
 sitemap:
     path: sitemap.xml

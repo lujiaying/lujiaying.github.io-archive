@@ -5,7 +5,13 @@ My Blog
 
 ```branch master``` store deploy files.
 
-## 操作指南
+## 操作指南 V1.0
+
+使用Travis持续集成，只需在source分支下`$ hexo new <title>`，然后push代码即可自动构建。
+
+---
+
+## 操作指南 V0.5
 以下操作均在source分支下进行
 
 新建一篇文章
