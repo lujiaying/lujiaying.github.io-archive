@@ -7,6 +7,7 @@ branches:
   - source
 
 before_install:
+- npm install -g hexo
 - npm install -g hexo-cli
 
 install:
