@@ -5,14 +5,14 @@
 # Site
 title: 卢嘉颖的博客
 subtitle:
-description: 深度学习,机器学习,编程,摄影,算法,软件开发,Python,C,C++
+description: Enjoy life~
 author: 卢嘉颖
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://lujiaying.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -65,7 +65,8 @@ pagination_dir: page
 #plugins:
 #- hexo-renderer-mathjax
 ## Themes: http://hexo.io/themes/
-theme: yilia
+#theme: yilia
+theme: next
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
