@@ -7,11 +7,6 @@ My Blog
 
 ## 操作指南 V1.0
 
-使用Travis持续集成，只需在source分支下`$ hexo new <title>`，然后push代码即可自动构建。
-
----
-
-## 操作指南 V0.5
 以下操作均在source分支下进行
 
 新建一篇文章
@@ -24,11 +19,13 @@ My Blog
 `$ hexo server`
 
 部署到服务器
-`$hexo deploy`
+1. 使用Travis持续集成，只需在source分支下`$ hexo new <title>`，然后push代码即可自动构建。(recommend)
+2. `$hexo deploy`
 
 ## 配置指南
 ```
-npm install
-cd themes
-git clone https://github.com/lujiaying/hexo-theme-yilia yilia
+$ git clone https://github.com/lujiaying/lujiaying.github.io.git
+$ git checkout --track origin/source
+$ npm install
+$ git clone https://github.com/lujiaying/hexo-theme-yilia themes/yilia
 ```
