@@ -1,6 +1,6 @@
 title: 使用IFTTT跨越墙里墙外，打通全社交平台
 date: 2015-07-26 21:53:30
-tags: [IFTTT, Facebook, 科学上网, 社交]
+tags: [IFTTT, 科学上网]
 ---
 ![ifttt](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt.png)
 

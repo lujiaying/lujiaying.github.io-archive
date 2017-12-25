@@ -1,6 +1,6 @@
 title: MovieTaster-使用Item2Vec做电影推荐
 date: 2017-08-15 17:37:38
-tags: [深度学习, 词向量, word2vec, 技术笔记]
+tags: [embedding, word2vec]
 ---
 
 ## 前言
@@ -9,6 +9,7 @@ tags: [深度学习, 词向量, word2vec, 技术笔记]
 1. 使用训练出的词向量作为输入特征，提升现有系统，如应用在情感分析、词性标注、语言翻译等神经网络中的输入层。
 2. 直接从语言学的角度对词向量进行应用，如使用向量的距离表示词语相似度、query相关性等。
 
+<!-- more -->
 
 ## MovieTaster
 
@@ -17,11 +18,8 @@ tags: [深度学习, 词向量, word2vec, 技术笔记]
 ![MovieTaster-demo-输入多个电影](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png)
 *MovieTaster-demo-输入多个电影*
 
-<!-- more -->
-
 ![MovieTaster-demo-输入单个电影](http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_one.png)
 *MovieTaster-demo-输入单个电影*
-
 
 ## Item2Vec
 

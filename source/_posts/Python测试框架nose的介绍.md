@@ -1,6 +1,6 @@
 title: Python测试框架nose的介绍
 date: 2015-06-04 17:20:18
-tags: [技术笔记, Python]
+tags: [Python, 测试]
 ---
 下面以一个例子说明[nose](https://nose.readthedocs.org/en/latest/)。
 目录结构如下（foo模块以及foo的测试代码）：

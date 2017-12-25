@@ -1,10 +1,11 @@
 title: Python 随机数标准库(2) -- shuffle()
 date: 2016-08-18 23:56:04
-tags: [Python, random, Math, 随机数, 数学, 算法, 技术笔记]
+tags: [Python, Math]
 ---
 Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的[numpy](http://www.numpy.org/)和[scipy](http://www.scipy.org/)项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。
 
 本章节主要介绍`random.shuffle()`，也叫做洗牌函数，它被用来打乱列表元素的顺序。
+<!-- more -->
 
 ## 洗牌的意义
 现实生活中有不少需要洗牌算法的场景。
@@ -13,8 +14,6 @@ Python random包可以用来生成随机数。随机数不仅可以用于数学�
 * 音乐播放器
 
 扑克牌游戏中，每轮游戏开始前都需要洗牌，使每个人摸到每张牌的概率尽量相等，确保游戏的公平性，同时增加游戏的随机性。
-
-<!-- more -->
 
 音乐播放器一般会提供“单曲循环”、“列表循环”、“随机播放”等多种播放模式。有不少用户偏好随机播放，著名音乐播放产品[iPod Shuffle](http://baike.baidu.com/link?url=6UWaF33vGb8F99bS8cJBLV5CqhZh0gHgvvVcpJBJoZSa54TdSllZiURr9SIfUPgAyHwGtUee0q_pvsvOuORQRq)的卖点之一就是“你永远不知道你将要听到的下一首歌曲是什么”。
 
