@@ -1,4 +1,7 @@
-# lujiaying.github.io [![Build Status](https://travis-ci.org/lujiaying/lujiaying.github.io.svg?branch=master)](https://travis-ci.org/lujiaying/lujiaying.github.io)
+# lujiaying.github.io 
+
+[![Build Status](https://travis-ci.org/lujiaying/lujiaying.github.io.svg?branch=source)](https://travis-ci.org/lujiaying/lujiaying.github.io)
+
 My Blog
 
 ```branch source``` store source codes.
