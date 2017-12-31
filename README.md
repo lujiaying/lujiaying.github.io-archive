@@ -25,10 +25,20 @@ My Blog
 1. 使用Travis持续集成，只需在source分支下`$ hexo new <title>`，然后push代码即可自动构建。(recommend)
 2. `$hexo deploy`
 
+
 ## 配置指南
+### hexo setup
+
+https://hexo.io/docs/setup.html
+
+```
+$ npm install -g hexo-cli
+```
+
+### repo setup
 ```
 $ git clone https://github.com/lujiaying/lujiaying.github.io.git
 $ git checkout --track origin/source
 $ npm install
-$ git clone https://github.com/lujiaying/hexo-theme-yilia themes/yilia
+$ git clone https://github.com/lujiaying/hexo-theme-next themes/next
 ```
