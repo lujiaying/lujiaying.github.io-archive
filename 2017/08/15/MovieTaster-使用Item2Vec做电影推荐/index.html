@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="embedding,word2vec," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言自从Mikolov在他2013年的论文“Efficient Estimation of Word Representation in Vector Space”[1]提出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。词向量基于语言模型的假设——“一个词的含义可以由它的上下文推断得出“，提出了词的Dis">
+<meta name="keywords" content="embedding,word2vec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MovieTaster-使用Item2Vec做电影推荐">
+<meta property="og:url" content="http://lujiaying.github.io/2017/08/15/MovieTaster-使用Item2Vec做电影推荐/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="前言自从Mikolov在他2013年的论文“Efficient Estimation of Word Representation in Vector Space”[1]提出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。词向量基于语言模型的假设——“一个词的含义可以由它的上下文推断得出“，提出了词的Dis">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_one.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/skipgram.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/skipgram-vs-cbow.png">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MovieTaster-使用Item2Vec做电影推荐">
+<meta name="twitter:description" content="前言自从Mikolov在他2013年的论文“Efficient Estimation of Word Representation in Vector Space”[1]提出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。词向量基于语言模型的假设——“一个词的含义可以由它的上下文推断得出“，提出了词的Dis">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2017/08/15/MovieTaster-使用Item2Vec做电影推荐/"/>
+
+
+
+
+
+  <title>MovieTaster-使用Item2Vec做电影推荐 | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2017/08/15/MovieTaster-使用Item2Vec做电影推荐/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MovieTaster-使用Item2Vec做电影推荐</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-15T17:37:38+00:00">
+                2017-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>自从Mikolov在他2013年的论文“<a href="https://arxiv.org/abs/1301.3781" target="_blank" rel="noopener">Efficient Estimation of Word Representation in Vector Space</a>”[1]提出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。词向量基于语言模型的假设——“一个词的含义可以由它的上下文推断得出“，提出了词的Distributed Representation表示方法。相较于传统NLP的高维、稀疏的表示法(One-hot Representation)，Word2Vec训练出的词向量是低维、稠密的。Word2Vec利用了词的上下文信息，语义信息更加丰富，目前常见的应用有：</p>
+<ol>
+<li>使用训练出的词向量作为输入特征，提升现有系统，如应用在情感分析、词性标注、语言翻译等神经网络中的输入层。</li>
+<li>直接从语言学的角度对词向量进行应用，如使用向量的距离表示词语相似度、query相关性等。</li>
+</ol>
+<a id="more"></a>
+<h2 id="MovieTaster"><a href="#MovieTaster" class="headerlink" title="MovieTaster"></a>MovieTaster</h2><p><a href="https://movietaster.leanapp.cn/movies/" target="_blank" rel="noopener">MovieTaster</a>是我用Item2Vec实现的电影推荐demo，它可以针对输入的一个或多个电影，基于<a href="https://www.douban.com/" target="_blank" rel="noopener">豆瓣</a>用户UGC内容(豆列)产生推荐列表。<a href="https://github.com/lujiaying/MovieTaster-Open" target="_blank" rel="noopener">Github Repo</a></p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_multi.png" alt="MovieTaster-demo-输入多个电影"><br><em>MovieTaster-demo-输入多个电影</em></p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/movie_rec_one.png" alt="MovieTaster-demo-输入单个电影"><br><em>MovieTaster-demo-输入单个电影</em></p>
+<h2 id="Item2Vec"><a href="#Item2Vec" class="headerlink" title="Item2Vec"></a>Item2Vec</h2><p><a href="https://movietaster.leanapp.cn/movies/" target="_blank" rel="noopener">MovieTaster</a>是Item2Vec在电影推荐上的实现，下面简单介绍一下Item2Vec的内容。<br>Item2Vec是由O Barkan，N Koenigstein在他们2016年的论文“<a href="https://arxiv.org/abs/1603.04259" target="_blank" rel="noopener">Item2Vec: Neural Item Embedding for Collaborative Filtering</a>“[3]中提出的。论文把Word2vec的Skipgram with Negative Sampling (SGNS)的算法思路迁移到基于物品的协同过滤(item-based CF)上，以物品的共现性作为自然语言中的上下文关系，构建神经网络学习出物品在隐空间的向量表示。论文中还比较了Item2Vec和SVD在微软Xbox音乐推荐服务和Windows 10商店的商品推荐的效果，结果显示Item2Vec效果有所提升。<br>总的来说，这篇论文的算法创新性不高，但把Word2Vec迁移到item-based CF的脑洞令人耳目一新。在Item2Vec中，一个物品集合被视作自然语言中的一个段落，物品集合的基本元素－物品等价于段落中的单词。因此在论文中，一个音乐物品集合是用户对某歌手歌曲的播放行为，一个商品集合是一个订单中包含的所有商品。<br>从自然语言序列迁移到物品集合，丢失了空间／时间信息，还无法对用户行为程度建模（喜欢和购买是不同程度的强行为）。好处是可以忽略用户－物品关系，即便获得的订单不包含用户信息，也可以生成物品集合。而论文的结论证明，在一些场景下序列信息的丢失是可忍受的。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/skipgram.png" alt="skipgram网络结构"><br><em>skipgram网络结构</em></p>
+<p>Item2Vec的网络结构与Word2Vec Skipgram的结构基本一致，只是输入的w(t)替换为i(t)。论文中还提到，由于训练数据迁移到物品集合，模型需要进行调整才能保证效果：<br>(1) 把Word2Vec的上下文窗口(window size)由定长的修改为变长的，长度由当前训练的物品集合长度决定。此方法需要修改网络结构。<br>(2) 不修改网络结构，而在训练神经网络时对物品集合做shuffle操作，变相地起到忽略序列带来对影响。<br>论文提出两种方法的实验效果基本一致。</p>
+<h2 id="MovieTaster是如何实现的"><a href="#MovieTaster是如何实现的" class="headerlink" title="MovieTaster是如何实现的"></a>MovieTaster是如何实现的</h2><p>MovieTaster的训练数据(我爬的)是豆友们的电影豆列共6万个，其中包括10万＋部电影。训练item向量使用的工具是fasttext，训练方式是skipgram、50个epoch，并滤去出现次数低于10次的电影。<br>我还尝试了其它训练参数，推荐结果如下：</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/MovieTaster/skipgram-vs-cbow.png" alt="skipgram-vs-cbow"><br><em>skipgram-vs-cbow</em></p>
+<p>从结果中可以观察出一些有意思的结论。战狼2是最近刚出的电影(此文作于2017/08)，包含战狼2的大多是“暑期国产电影合集”，“2017年不得不看的国产电影“这类豆列；美国往事属于经典老片，训练语料足够多，skipgram和cbow的推荐结果各有千秋；小时代在豆瓣中属于不受待见的一类电影，包含小时代的豆列较少，skipgram的推荐结果优于cbow。<br>大家关于Item2Vec有什么脑洞，欢迎讨论。文章后续会公开部分<a href="https://github.com/lujiaying/MovieTaster-Open" target="_blank" rel="noopener">源码和数据集</a>，并尝试更多不同算法和参数的效果。</p>
+<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><p>[1] Mikolov T, Chen K, Corrado G, et al. Efficient Estimation of Word Representations in Vector Space[J]. Computer Science, 2013.<br>[2] <a href="http://blog.csdn.net/itplus/article/details/37969519" target="_blank" rel="noopener">word2vec 中的数学原理详解</a><br>[3] Barkan O, Koenigstein N. Item2Vec: Neural Item Embedding for Collaborative Filtering[J]. 2016:1-6.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/embedding/" rel="tag"># embedding</a>
+          
+            <a href="/tags/word2vec/" rel="tag"># word2vec</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/25/2016年总结-成为社会人/" rel="next" title="2016年总结-成为社会人">
+                <i class="fa fa-chevron-left"></i> 2016年总结-成为社会人
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/22/词向量的前世今生/" rel="prev" title="词向量的前世今生">
+                词向量的前世今生 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MovieTaster"><span class="nav-number">2.</span> <span class="nav-text">MovieTaster</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Item2Vec"><span class="nav-number">3.</span> <span class="nav-text">Item2Vec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MovieTaster是如何实现的"><span class="nav-number">4.</span> <span class="nav-text">MovieTaster是如何实现的</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#参考资料："><span class="nav-number">4.0.1.</span> <span class="nav-text">参考资料：</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

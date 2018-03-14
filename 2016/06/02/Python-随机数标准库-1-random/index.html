@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Math," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.random()，它被用来生成一个0~1之间的随机浮点数，是randint(), shuff">
+<meta name="keywords" content="Python,Math">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 随机数标准库(1) -- random()">
+<meta property="og:url" content="http://lujiaying.github.io/2016/06/02/Python-随机数标准库-1-random/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.random()，它被用来生成一个0~1之间的随机浮点数，是randint(), shuff">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FC%23%E7%9A%84System.Random%E7%B1%BB%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2Fphp%E7%9A%84rand%E5%87%BD%E6%95%B0%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2F%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%95%A3%E7%82%B9%E5%9B%BE.png">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 随机数标准库(1) -- random()">
+<meta name="twitter:description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.random()，它被用来生成一个0~1之间的随机浮点数，是randint(), shuff">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FC%23%E7%9A%84System.Random%E7%B1%BB%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2016/06/02/Python-随机数标准库-1-random/"/>
+
+
+
+
+
+  <title>Python 随机数标准库(1) -- random() | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2016/06/02/Python-随机数标准库-1-random/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 随机数标准库(1) -- random()</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-02T14:03:53+00:00">
+                2016-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的<a href="http://www.numpy.org/" target="_blank" rel="noopener">numpy</a>和<a href="http://www.scipy.org/" target="_blank" rel="noopener">scipy</a>项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。</p>
+<p>本章节主要介绍<code>random.random()</code>，它被用来生成一个0~1之间的随机浮点数，是<code>randint(), shuffle(), choice()</code>等其他函数的基础。<br><a id="more"></a></p>
+<h2 id="随机数的意义"><a href="#随机数的意义" class="headerlink" title="随机数的意义"></a>随机数的意义</h2><p>现实生活中，有很多场景需要用到“随机数”：</p>
+<ul>
+<li>彩票</li>
+<li>棋牌游戏中的洗牌和掷骰子</li>
+<li>游戏掉宝率</li>
+</ul>
+<p>其中大部分是靠计算机软件生成的的“伪随机数”。伪随机数一般是由随机种子和随机算法计算生成的，也就是说，在随机种子和随机算法一定的情况下，伪随机数是可重复、可预测的。<br>简单来说，伪随机数具有<strong>循环长度</strong>。什么叫循环长度？就是如果第一次产生数字55，第二个产生数字107，那么循环多少次后，会继续产生<code>55，107……</code>这样的序列。大部分简单算法的循环长度都是2^32左右。</p>
+<p>这有什么影响吗？如果你使用伪随机数生成中奖号码，有心人可以根据历史结果推断出你的中奖号码规律。事实上，过去有些电话充值卡就是因此被破解的。大家可以思考其中的门道。</p>
+<blockquote>
+<p>伪随机数的一个优点是它们的计算不需要外部的特殊硬件的支持，因此在计算机科学中伪随机数依然被使用。真正的随机数必须使用专门的设备，比如热噪讯号、量子力学的效应、放射性元素的衰退辐射，或使用无法预测的现象，譬如用户按键盘的位置与速度、用户运动鼠标的路径坐标等来产生。 [<a href="https://zh.wikipedia.org/wiki/%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%80%A7" target="_blank" rel="noopener">wiki</a> 伪随机性]</p>
+</blockquote>
+<h2 id="好的随机数算法"><a href="#好的随机数算法" class="headerlink" title="好的随机数算法"></a>好的随机数算法</h2><p>软件无法产生真正意义上的随机数，而只能产生伪随机数。<br>好的随机数算法应具有如下性质：<br>(1)相同序列的概率非常低<br>(2)符合统计学的平均性</p>
+<p>好的伪随机数算法和差的具有天壤之别，其中差别之大用肉眼就可以观测到：</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FC%23%E7%9A%84System.Random%E7%B1%BB%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png" alt="C#的System.Random类生成的随机数填充的位图"><br><em>C#的System.Random类生成的随机数填充的位图</em></p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2Fphp%E7%9A%84rand%E5%87%BD%E6%95%B0%E7%94%9F%E6%88%90%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E5%A1%AB%E5%85%85%E7%9A%84%E4%BD%8D%E5%9B%BE.png" alt="php的rand函数生成的随机数填充的位图"><br><em>php的rand函数生成的随机数填充的位图</em></p>
+<h2 id="常用的随机数算法"><a href="#常用的随机数算法" class="headerlink" title="常用的随机数算法"></a>常用的随机数算法</h2><h4 id="线性同余"><a href="#线性同余" class="headerlink" title="线性同余"></a>线性同余</h4><p>线性同余随机数生成器LCG（linear congruential generator）是最古老也最广为人知的位随机数生成器算法，它通过递归公式产生伪随机数。<br>公式：<code>X(i) = [a * X(i-1) + c] Mod m</code>产生一个<code>[0, m-1]</code>之间的随机数序列，种子值<code>X(0)</code>是用户提供的且是上式中唯一用作递归的随机数。该序列通过浮点数操作（除法）可以转化为在<code>[0, 1]</code>之间均匀分布的随机数序列。<br>LCG的循环长度对<code>a, c</code>敏感，选择合适的参数循环长度可达到<code>m</code>。</p>
+<p>通过以上公式，我们很容易完成线性同余生成器的Python实现。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Random</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="string">'''Random 库实现'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x=None)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> x <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">import</span> time</span><br><span class="line">            self.seed = long(time.time())</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.seed = long(x)</span><br><span class="line">        self._seed = self.seed</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">random_LCG</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">'''</span></span><br><span class="line"><span class="string">        线性同余产生0~1之间的随机数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        X(k) = [a * X(k-1) + c] mod m</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        <span class="comment"># 以下参数值参照GCC编译器</span></span><br><span class="line">        m = <span class="number">2</span>**<span class="number">32</span></span><br><span class="line">        a = <span class="number">1103515245</span></span><br><span class="line">        c = <span class="number">12345</span></span><br><span class="line">        self._seed = (a * self._seed + c) % m</span><br><span class="line">        <span class="keyword">return</span> self._seed / float(m<span class="number">-1</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="平方取中"><a href="#平方取中" class="headerlink" title="平方取中"></a>平方取中</h4><p>平方取中法是由冯·诺依曼在1946年提出的，其基本思想为：将数列中的第<code>X(i)</code>项（假设其有m位）平方，取得到的<code>2m</code>位数（若不足2m位，在最高位前补0）中间部分的<code>m</code>位数字，作为<code>X(i)</code>的下一项<code>X(i+1)</code>，由此产生一个伪随机数数列。即：<br><code>x(i+1) = (10^(-m/2) * x(i) * x(i)) Mod (10^m)</code><br>平方取中法计算较快，但在实际应用时会发现该方法容易产生周期性明显的数列，而且在某些情况下计算到一定步骤后始终产生相同的数甚至是零，或者产生的数字位数越来越小直至始终产生零。</p>
+<p>在类 Random 中添加平方取中函数。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random_MSM</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    平方取中法产生0~1之间的随机数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    X(i+1) = [10^(-m/2) * X(i)^2] mod (10^m)</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    m = <span class="number">8</span></span><br><span class="line">    self._seed = long((<span class="number">10</span>**(-m/<span class="number">2</span>) * self._seed * self._seed) % (<span class="number">10</span>**m))</span><br><span class="line">    <span class="keyword">return</span> self._seed / float(<span class="number">10</span>**m <span class="number">-1</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="Wichmann-Hill"><a href="#Wichmann-Hill" class="headerlink" title="Wichmann-Hill"></a>Wichmann-Hill</h4><p>Python Random标准库中提供了基于Wichmann-Hill 算法实现的<code>random()</code>函数。</p>
+<p>Wichman-Hill算法通过线性合并不同短周期随机数发生器的输出来产生长周期的随机数序列。如果把周期<code>N1</code>和<code>N2</code>的波形加起来那么得到的波形周期为<br><code>N = lcm（N1,N2）</code><br>这样，通过结合几个随机数发生器的输出，可以产生一个更长的序列。它结合3个随机数发生器的输出如下:<br><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X(<span class="built_in">n</span>) = <span class="number">171</span> * X(<span class="built_in">n</span>-<span class="number">1</span>) <span class="built_in">Mod</span> <span class="number">30269</span></span><br><span class="line">Y(<span class="built_in">n</span>) = <span class="number">172</span> * X(<span class="built_in">n</span>-<span class="number">1</span>) <span class="built_in">Mod</span> <span class="number">30307</span></span><br><span class="line">Z(<span class="built_in">n</span> )= <span class="number">170</span> * X(<span class="built_in">n</span>-<span class="number">1</span>) <span class="built_in">Mod</span> <span class="number">30323</span></span><br><span class="line">U(<span class="built_in">n</span>) = &#123;X(<span class="built_in">n</span>)/<span class="number">30269</span> + Y(<span class="built_in">n</span>)/<span class="number">30307</span> + Z(<span class="built_in">n</span>)/<span class="number">30323</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>源码如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">random</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Get the next random number in the range [0.0, 1.0)."""</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Wichman-Hill random number generator.</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># Wichmann, B. A. &amp; Hill, I. D. (1982)</span></span><br><span class="line">        <span class="comment"># Algorithm AS 183:</span></span><br><span class="line">        <span class="comment"># An efficient and portable pseudo-random number generator</span></span><br><span class="line">        <span class="comment"># Applied Statistics 31 (1982) 188-190</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># see also:</span></span><br><span class="line">        <span class="comment">#        Correction to Algorithm AS 183</span></span><br><span class="line">        <span class="comment">#        Applied Statistics 33 (1984) 123</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment">#        McLeod, A. I. (1985)</span></span><br><span class="line">        <span class="comment">#        A remark on Algorithm AS 183</span></span><br><span class="line">        <span class="comment">#        Applied Statistics 34 (1985),198-200</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># This part is thread-unsafe:</span></span><br><span class="line">        <span class="comment"># BEGIN CRITICAL SECTION</span></span><br><span class="line">        x, y, z = self._seed</span><br><span class="line">        x = (<span class="number">171</span> * x) % <span class="number">30269</span></span><br><span class="line">        y = (<span class="number">172</span> * y) % <span class="number">30307</span></span><br><span class="line">        z = (<span class="number">170</span> * z) % <span class="number">30323</span></span><br><span class="line">        self._seed = x, y, z</span><br><span class="line">        <span class="comment"># END CRITICAL SECTION</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Note:  on a platform using IEEE-754 double arithmetic, this can</span></span><br><span class="line">        <span class="comment"># never return 0.0 (asserted by Tim; proof too long for a comment).</span></span><br><span class="line">        <span class="keyword">return</span> (x/<span class="number">30269.0</span> + y/<span class="number">30307.0</span> + z/<span class="number">30323.0</span>) % <span class="number">1.0</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="Mersenne-Twister"><a href="#Mersenne-Twister" class="headerlink" title="Mersenne Twister"></a>Mersenne Twister</h4><p>Mersenne Twister算法译为马特赛特旋转演算法，是伪随机数发生器之一，其主要作用是生成伪随机数。此算法是Makoto Matsumoto （松本）和Takuji Nishimura （西村）于1997年开发的，基于有限二进制字段上的矩阵线性再生。可以快速产生高质量的伪随机数，修正了古老随机数产生算法的很多缺陷。<br>Mersenne Twister有以下优点：随机性好，在计算机上容易实现，占用内存较少(mt19937的C程式码执行仅需624个字的工作区域)，与其它已使用的伪随机数发生器相比，产生随机数的速度快、周期长，可达到2^19937-1，且具有623维均匀分布的性质。<br>Mersenne Twister 目前被很多语言采用，作为随机数产生算法。以下是Python Random库中关于默认 Random.random() 函数的说明。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">General notes on the underlying Mersenne Twister core generator:</span><br><span class="line"></span><br><span class="line">* The period <span class="keyword">is</span> <span class="number">2</span>**<span class="number">19937</span><span class="number">-1.</span></span><br><span class="line">* It <span class="keyword">is</span> one of the most extensively tested generators <span class="keyword">in</span> existence.</span><br><span class="line">* Without a direct way to compute N steps forward, the semantics of</span><br><span class="line">  jumpahead(n) are weakened to simply jump to another distant state <span class="keyword">and</span> rely</span><br><span class="line">  on the large period to avoid overlapping sequences.</span><br><span class="line">* The random() method <span class="keyword">is</span> implemented <span class="keyword">in</span> C, executes <span class="keyword">in</span> a single Python step,</span><br><span class="line">  <span class="keyword">and</span> <span class="keyword">is</span>, therefore, threadsafe.</span><br></pre></td></tr></table></figure></p>
+<h2 id="性能比较"><a href="#性能比较" class="headerlink" title="性能比较"></a>性能比较</h2><p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2F%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%95%A3%E7%82%B9%E5%9B%BE.png" alt="随机数散点图"></p>
+<p>根据随机数算法生成一组坐标(x,y)，使用<a href="http://matplotlib.org/" target="_blank" rel="noopener">pylab</a>绘制其在二维坐标系上的散点图。<br>上图的四个子图分别由不同的算法生成的<strong>2000</strong>个点绘制，散点图的特点是相同点数不堆积只绘制一次，因此在坐标轴上点数越多、分布越均匀代表算法性能越优秀。<br>可发现：</p>
+<ul>
+<li>平方取中算法较其他算法出现了明显的稀疏分布，即算法在2000个点时已命中循环长度。</li>
+<li>线性同余生成器算法在2000个点时与Python Random标准库提供的Wichmann-Hill、Mersenne Twister算法性能差距不大。</li>
+</ul>
+<h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><ul>
+<li>Random 标准库<code>shuffle(), choice()</code> 函数原理分析（计划写作中）</li>
+<li><a href="https://zhuanlan.zhihu.com/p/19930815" target="_blank" rel="noopener">伪随机的上位和真随机的逆袭</a></li>
+<li><a href="https://www.random.org/" target="_blank" rel="noopener">Random.org</a>: 通过大气噪音 (Atmospheric Noise) 这种大自然的随机现象来产生最优质最科学最随机的随机数生成及衍生服务。他们提供的免费服务包括：随机数、数组、字符、序列生成，随机正态分布生成，机选彩票，抛硬币，掷色子，洗牌器，随机打乱顺序，随机生成时间、日期、密码、地理坐标、DNA序列、纯净白噪音等等，从娱乐到学术都有。当然他们还有付费服务：第三方认证的抽签，为非常重要的抽签提供最高纯度的随机性。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Math/" rel="tag"># Math</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/06/云主机如何挂载云硬盘/" rel="next" title="云主机如何挂载云硬盘">
+                <i class="fa fa-chevron-left"></i> 云主机如何挂载云硬盘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/18/Python-随机数标准库-2-shuffle/" rel="prev" title="Python 随机数标准库(2) -- shuffle()">
+                Python 随机数标准库(2) -- shuffle() <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#随机数的意义"><span class="nav-number">1.</span> <span class="nav-text">随机数的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#好的随机数算法"><span class="nav-number">2.</span> <span class="nav-text">好的随机数算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用的随机数算法"><span class="nav-number">3.</span> <span class="nav-text">常用的随机数算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线性同余"><span class="nav-number">3.0.1.</span> <span class="nav-text">线性同余</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#平方取中"><span class="nav-number">3.0.2.</span> <span class="nav-text">平方取中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Wichmann-Hill"><span class="nav-number">3.0.3.</span> <span class="nav-text">Wichmann-Hill</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mersenne-Twister"><span class="nav-number">3.0.4.</span> <span class="nav-text">Mersenne Twister</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能比较"><span class="nav-number">4.</span> <span class="nav-text">性能比较</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展阅读"><span class="nav-number">5.</span> <span class="nav-text">拓展阅读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

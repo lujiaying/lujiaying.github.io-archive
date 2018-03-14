@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="机器学习,逻辑回归," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="逻辑回归(Logistic Regression, LR)模型其实仅在线性回归的基础上，套用了一个sigmod函数，但也就由于这个sigmod函数，使得逻辑回归模型成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。关于LR模型的数学原理和参数求解方法，已经有很多优秀的文章介绍过，在此我不再赘述。今天给大家介绍的主题是逻辑回归模型中分类标签的概率分布。">
+<meta name="keywords" content="机器学习,逻辑回归">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑回归模型--分类标签的概率分布">
+<meta property="og:url" content="http://lujiaying.github.io/2016/04/17/逻辑回归模型-分类标签的概率分布/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="逻辑回归(Logistic Regression, LR)模型其实仅在线性回归的基础上，套用了一个sigmod函数，但也就由于这个sigmod函数，使得逻辑回归模型成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。关于LR模型的数学原理和参数求解方法，已经有很多优秀的文章介绍过，在此我不再赘述。今天给大家介绍的主题是逻辑回归模型中分类标签的概率分布。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FLR_hypothesis_function.png">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="逻辑回归模型--分类标签的概率分布">
+<meta name="twitter:description" content="逻辑回归(Logistic Regression, LR)模型其实仅在线性回归的基础上，套用了一个sigmod函数，但也就由于这个sigmod函数，使得逻辑回归模型成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。关于LR模型的数学原理和参数求解方法，已经有很多优秀的文章介绍过，在此我不再赘述。今天给大家介绍的主题是逻辑回归模型中分类标签的概率分布。">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FLR_hypothesis_function.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2016/04/17/逻辑回归模型-分类标签的概率分布/"/>
+
+
+
+
+
+  <title>逻辑回归模型--分类标签的概率分布 | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2016/04/17/逻辑回归模型-分类标签的概率分布/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">逻辑回归模型--分类标签的概率分布</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-17T23:32:05+00:00">
+                2016-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>逻辑回归(Logistic Regression, LR)模型其实仅在线性回归的基础上，套用了一个sigmod函数，但也就由于这个sigmod函数，使得逻辑回归模型成为了机器学习领域一颗耀眼的明星，更是计算广告学的核心。<br>关于LR模型的数学原理和参数求解方法，已经有很多优秀的文章介绍过，在此我不再赘述。今天给大家介绍的主题是逻辑回归模型中分类标签的概率分布。<br><a id="more"></a></p>
+<blockquote>
+<p>基于经典统计学学派的观点，逻辑回归的分类标签是基于样本特征通过二项分布产生的，分类器要做的实际上就是估计这个分布。</p>
+</blockquote>
+<p>为什么说逻辑回归的分类标签是服从二项分布的呢？<br>请先看逻辑回归的hypothesis（假设）函数:<br><img src="http://7xkdra.com1.z0.glb.clouddn.com/image%2Fblog%2FLR_hypothesis_function.png" alt="Hypothesis function"></p>
+<p>LR模型是这样工作的：对待分类样本的特征向量x，把x带入h函数，算得hθ(x)。若hθ(x)大于预设门限（一般是0.5），则判定待分类样本属于类别1，否则属于类别0。<br>简单来说，逻辑回归模型希望找到一个合适的θ，使得h函数在预测集上能有足够好的表现。在此，我们假设预测集和训练集满足相同的概率分布。</p>
+<p>那么，预测集和训练集应该满足怎样的概率分布呢？先贤们已经得出结论，<strong>二项分布</strong>。<br>请回想二项分布的性质：<br>1）重复进行n次随机试验，n次试验相互独立，且事件发生与否的概率在每一次独立试验中都保持不变。<br>2）每次试验仅有两个可能结果，且两种结果互斥。<br>逻辑回归的h函数正是基于 “样本分类标签满足二项分布”的假设而推导出来的。</p>
+<h3 id="性质1的说明"><a href="#性质1的说明" class="headerlink" title="性质1的说明"></a>性质1的说明</h3><p>针对性质1，若样本分类标签不满足“n次试验相互独立，且事件发生与否的概率在每一次独立试验中都保持不变”，则对应到h函数，针对相同的自变量x，因变量h(x)会有不同的输出值，进而给出不同的分类标签y，这与我们对hypothesis 函数的定义相矛盾。<br>上面这段话可能有点费解，让我用一个例子解释：我训练了一个女友心情分类器，分类器的输入是一个二维特征向量 <code>[我早上是否和她说了早安，我最近一周是否给她购买过礼物]</code>，分类器的输出是<code>开心/不开心</code>。训练样本如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>训练样本</th>
+<th>说早安</th>
+<th>买礼物</th>
+<th>女友心情 </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>样本1</td>
+<td>是</td>
+<td>是</td>
+<td>开心        </td>
+</tr>
+<tr>
+<td>样本2</td>
+<td>否</td>
+<td>是</td>
+<td>开心        </td>
+</tr>
+<tr>
+<td>样本3</td>
+<td>是</td>
+<td>否</td>
+<td>不开心     </td>
+</tr>
+<tr>
+<td>样本4</td>
+<td>否</td>
+<td>否</td>
+<td>不开心     </td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>分类器训练好了，我满心欢喜地来预测今天女友今天是否开心，<code>[说了早安，买了礼物]</code>，结果女友今天吐槽我说“我同事的老公又给她买了新的项链，我<strong>不开心</strong>”。显然，我们的分类器失效了。<br>事实上，根据谚语”女人的心情，三分天注定，七分靠shopping”，我们可以推断出女友心情应该是随机且不可预测的。LR模型在该场景完败，奉劝大家还是多买买买来讨好女朋友。</p>
+<h3 id="性质2的说明"><a href="#性质2的说明" class="headerlink" title="性质2的说明"></a>性质2的说明</h3><p>针对性质2，一个样本只可能属于一个分类标签，这个比较好理解，LR模型的分类结果是样本i属于类别C，不存在样本i既属于类别C又属于类别D的情况。如果样本可能属于多个分类，例如薛定谔的猫，就不适合使用LR模型来分类。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>LR模型建立在 “样本分类标签满足二项分布”的假设上。因此，对于不满足二项分布的场景，LR模型无法准确分类。解决的途径可以是增加非线性特征、组合特征等，使分类标签在更高维特征空间满足二项分布；或是选择决策树、随机森林等非线性模型。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/机器学习/" rel="tag"># 机器学习</a>
+          
+            <a href="/tags/逻辑回归/" rel="tag"># 逻辑回归</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/06/孤独也是一种正能量——芬兰留学感想/" rel="next" title="孤独也是一种正能量——芬兰留学感想">
+                <i class="fa fa-chevron-left"></i> 孤独也是一种正能量——芬兰留学感想
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/06/云主机如何挂载云硬盘/" rel="prev" title="云主机如何挂载云硬盘">
+                云主机如何挂载云硬盘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#性质1的说明"><span class="nav-number">1.</span> <span class="nav-text">性质1的说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性质2的说明"><span class="nav-number">2.</span> <span class="nav-text">性质2的说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

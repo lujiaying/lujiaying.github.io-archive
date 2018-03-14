@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,Math," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.shuffle()，也叫做洗牌函数，它被用来打乱列表元素的顺序。">
+<meta name="keywords" content="Python,Math">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 随机数标准库(2) -- shuffle()">
+<meta property="og:url" content="http://lujiaying.github.io/2016/08/18/Python-随机数标准库-2-shuffle/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.shuffle()，也叫做洗牌函数，它被用来打乱列表元素的顺序。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95%E8%AF%81%E6%98%8E.png">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 随机数标准库(2) -- shuffle()">
+<meta name="twitter:description" content="Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的numpy和scipy项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。 本章节主要介绍random.shuffle()，也叫做洗牌函数，它被用来打乱列表元素的顺序。">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95%E8%AF%81%E6%98%8E.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2016/08/18/Python-随机数标准库-2-shuffle/"/>
+
+
+
+
+
+  <title>Python 随机数标准库(2) -- shuffle() | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2016/08/18/Python-随机数标准库-2-shuffle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 随机数标准库(2) -- shuffle()</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-18T23:56:04+00:00">
+                2016-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Python random包可以用来生成随机数。随机数不仅可以用于数学用途，还经常被嵌入到算法中，用以提高算法效率，并提高程序的安全性。如果想要更加高级的数学功能，可以考虑选择标准库之外的<a href="http://www.numpy.org/" target="_blank" rel="noopener">numpy</a>和<a href="http://www.scipy.org/" target="_blank" rel="noopener">scipy</a>项目，它们不但支持数组和矩阵运算，还有丰富的数学和物理方程可供使用。</p>
+<p>本章节主要介绍<code>random.shuffle()</code>，也叫做洗牌函数，它被用来打乱列表元素的顺序。<br><a id="more"></a></p>
+<h2 id="洗牌的意义"><a href="#洗牌的意义" class="headerlink" title="洗牌的意义"></a>洗牌的意义</h2><p>现实生活中有不少需要洗牌算法的场景。</p>
+<ul>
+<li>扑克牌</li>
+<li>音乐播放器</li>
+</ul>
+<p>扑克牌游戏中，每轮游戏开始前都需要洗牌，使每个人摸到每张牌的概率尽量相等，确保游戏的公平性，同时增加游戏的随机性。</p>
+<p>音乐播放器一般会提供“单曲循环”、“列表循环”、“随机播放”等多种播放模式。有不少用户偏好随机播放，著名音乐播放产品<a href="http://baike.baidu.com/link?url=6UWaF33vGb8F99bS8cJBLV5CqhZh0gHgvvVcpJBJoZSa54TdSllZiURr9SIfUPgAyHwGtUee0q_pvsvOuORQRq" target="_blank" rel="noopener">iPod Shuffle</a>的卖点之一就是“你永远不知道你将要听到的下一首歌曲是什么”。</p>
+<p>随机播放可以有两种实现方案: <code>random</code> 或 <code>shuffle</code>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>原理</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>random</td>
+<td>每次随机取歌播放</td>
+<td>歌曲选取等概</td>
+<td>可能出现AA、ABAB、ABCABC这种反人脑随机认知的序列</td>
+</tr>
+<tr>
+<td>shuffle</td>
+<td>按乱序列表顺序播放</td>
+<td>避免random的缺陷</td>
+<td>每轮播放中同一首歌只能出现一次</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="shuffle算法原理"><a href="#shuffle算法原理" class="headerlink" title="shuffle算法原理"></a>shuffle算法原理</h2><h3 id="Knuth-Durstenfeld-Shuffle"><a href="#Knuth-Durstenfeld-Shuffle" class="headerlink" title="Knuth-Durstenfeld Shuffle"></a>Knuth-Durstenfeld Shuffle</h3><p><a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm" target="_blank" rel="noopener">Knuth-Durstenfeld Shuffle</a> 在<a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle" target="_blank" rel="noopener">Fisher-Yates shuffle</a>的基础上对算法进行了改进，形成了现代工业界常用的洗牌算法。</p>
+<blockquote>
+<p>Durstenfeld’s solution is to move the “struck” numbers to the end of the list by swapping them with the last unstruck number at each iteration.</p>
+</blockquote>
+<p>Durstenfeld的方法是：</p>
+<ol>
+<li>每次从未乱序列表中随机选择一个数字</li>
+<li>把该数字与未乱序列表的末尾数字交换，如此做则末尾存放的是已乱序处理过的数字</li>
+<li>循环，直至所有数字均被乱序处理过</li>
+</ol>
+<p>这是一个in-place的算法，算法时间复杂度从Fisher算法的<em>O(n^2<br>)</em>提升到了<em>O(n)</em>。算法伪代码如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- To shuffle an array a of n elements (indices 0..n-1):</span></span><br><span class="line"><span class="keyword">for</span> i <span class="built_in">from</span> n−<span class="number">1</span> downto <span class="number">1</span> <span class="built_in">do</span></span><br><span class="line">     j ← <span class="built_in">random</span> <span class="keyword">integer</span> such that <span class="number">0</span> ≤ j ≤ i</span><br><span class="line">     exchange <span class="keyword">a</span>[j] <span class="keyword">and</span> <span class="keyword">a</span>[i]</span><br></pre></td></tr></table></figure>
+<p>Python Random标准库中的shuffle使用的正是<code>Knuth-Durstenfeld Shuffle</code>算法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shuffle</span><span class="params">(self, x, random=None)</span>:</span></span><br><span class="line">    <span class="string">"""x, random=random.random -&gt; shuffle list x in place; return None.</span></span><br><span class="line"><span class="string">    Optional arg random is a 0-argument function returning a random</span></span><br><span class="line"><span class="string">    float in [0.0, 1.0); by default, the standard random.random.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> random <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        random = self.random</span><br><span class="line">    _int = int</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> reversed(xrange(<span class="number">1</span>, len(x))):</span><br><span class="line">        <span class="comment"># pick an element in x[:i+1] with which to exchange x[i]</span></span><br><span class="line">        j = _int(random() * (i+<span class="number">1</span>))</span><br><span class="line">        x[i], x[j] = x[j], x[i]</span><br></pre></td></tr></table></figure>
+<h3 id="蓄水池算法"><a href="#蓄水池算法" class="headerlink" title="蓄水池算法"></a>蓄水池算法</h3><p><a href="https://en.wikipedia.org/wiki/Reservoir_sampling" target="_blank" rel="noopener">蓄水池算法</a>从某种意义上来说，是另一种形式的shuffle算法。它能够从未知或者很大样本空间随机地取k个数，且保证样本空间中每一个数被抽取的概率是等概的。</p>
+<p>在实际应用中，往往会遇到大数据流的情况。因此，我们无法先保存整个数据流然后再从中选取，而是期望有一种算法能将数据流遍历一遍就得到所选取的元素，并且保证得到的元素是随机的。这种算法正是蓄水池算法。</p>
+<p>蓄水池算法的伪代码如下：<br><figure class="highlight ocaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Init</span> : a reservoir <span class="keyword">with</span> the size: k</span><br><span class="line">    <span class="keyword">for</span> i= k+<span class="number">1</span> <span class="keyword">to</span> <span class="type">N</span></span><br><span class="line">        <span class="type">M</span>=random(<span class="number">1</span>, i);</span><br><span class="line">        <span class="keyword">if</span> (<span class="type">M</span> &lt; k)</span><br><span class="line">             <span class="type">SWAP</span> the <span class="type">Mth</span> <span class="keyword">value</span> <span class="keyword">and</span> ith <span class="keyword">value</span></span><br><span class="line">    <span class="keyword">end</span> <span class="keyword">for</span></span><br></pre></td></tr></table></figure></p>
+<p>算法的核心思想分为两步：</p>
+<ol>
+<li>构建一个容积为k的蓄水池，即对一个数据流的前k个元素，保存在集合A中；</li>
+<li>从第k+1个元素开始，假设当前元素为数据流中的第m<code>(m&gt;k)</code>个元素。先以 k/m的概率选择第m个元素，如果被选中，则从集合A中随机选择一个元素并用元素m替换之；否则淘汰元素m。 </li>
+</ol>
+<p>下面给出每个元素被选中的概率为k/n的证明：<br>设某元素m，且 m &lt;= n，那么<code>P(m最终被选中) = P(m被选中) * [P(m后面的元素没有被选中) + P(m后面的元素被选中) * P(m没有被替换)]</code>，即：</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/%E8%93%84%E6%B0%B4%E6%B1%A0%E7%AE%97%E6%B3%95%E8%AF%81%E6%98%8E.png" alt="证明"></p>
+<h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><ul>
+<li><a href="http://lujiaying.github.io/2016/06/02/Python-%E9%9A%8F%E6%9C%BA%E6%95%B0%E6%A0%87%E5%87%86%E5%BA%93-1-random/">Python 随机数标准库(1) — random()</a></li>
+<li>Python 随机数标准库的应用 — 彩票究竟是不是低智商税(计划写作中)</li>
+</ul>
+<blockquote>
+<p>更多精彩内容，请关注我的<a href="http://lujiaying.github.io/">个人博客</a>。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+            <a href="/tags/Math/" rel="tag"># Math</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/02/Python-随机数标准库-1-random/" rel="next" title="Python 随机数标准库(1) -- random()">
+                <i class="fa fa-chevron-left"></i> Python 随机数标准库(1) -- random()
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/25/2016年总结-成为社会人/" rel="prev" title="2016年总结-成为社会人">
+                2016年总结-成为社会人 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#洗牌的意义"><span class="nav-number">1.</span> <span class="nav-text">洗牌的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shuffle算法原理"><span class="nav-number">2.</span> <span class="nav-text">shuffle算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Knuth-Durstenfeld-Shuffle"><span class="nav-number">2.1.</span> <span class="nav-text">Knuth-Durstenfeld Shuffle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#蓄水池算法"><span class="nav-number">2.2.</span> <span class="nav-text">蓄水池算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拓展阅读"><span class="nav-number">3.</span> <span class="nav-text">拓展阅读</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

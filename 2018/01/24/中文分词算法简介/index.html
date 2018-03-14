@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NLP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="什么是中文分词与大部分印欧语系的语言不同，中文在词与词之间没有任何空格之类的显示标志指示词的边界。因此，中文分词是很多自然语言处理系统中的基础模块和首要环节。 下面以jieba的示例给读者一个对分词的感性认识。 1234567【全模式】: 我/ 来到/ 北京/ 清华/ 清华大学/ 华大/ 大学【精确模式】: 我/ 来到/ 北京/ 清华大学【新词识别】：他, 来到, 了, 网易, 杭研, 大厦【搜索">
+<meta name="keywords" content="NLP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中文分词算法简介">
+<meta property="og:url" content="http://lujiaying.github.io/2018/01/24/中文分词算法简介/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="什么是中文分词与大部分印欧语系的语言不同，中文在词与词之间没有任何空格之类的显示标志指示词的边界。因此，中文分词是很多自然语言处理系统中的基础模块和首要环节。 下面以jieba的示例给读者一个对分词的感性认识。 1234567【全模式】: 我/ 来到/ 北京/ 清华/ 清华大学/ 华大/ 大学【精确模式】: 我/ 来到/ 北京/ 清华大学【新词识别】：他, 来到, 了, 网易, 杭研, 大厦【搜索">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_dag.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_HMM_func.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_CRF_func.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/BiLSTM-CRF.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/dive_into_BiLSTM-CRF.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/LSMT-CNNs-CRF_part1.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/LSMT-CNNs-CRF_part2.png">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="中文分词算法简介">
+<meta name="twitter:description" content="什么是中文分词与大部分印欧语系的语言不同，中文在词与词之间没有任何空格之类的显示标志指示词的边界。因此，中文分词是很多自然语言处理系统中的基础模块和首要环节。 下面以jieba的示例给读者一个对分词的感性认识。 1234567【全模式】: 我/ 来到/ 北京/ 清华/ 清华大学/ 华大/ 大学【精确模式】: 我/ 来到/ 北京/ 清华大学【新词识别】：他, 来到, 了, 网易, 杭研, 大厦【搜索">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_dag.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2018/01/24/中文分词算法简介/"/>
+
+
+
+
+
+  <title>中文分词算法简介 | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2018/01/24/中文分词算法简介/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">中文分词算法简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T12:27:59+00:00">
+                2018-01-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是中文分词"><a href="#什么是中文分词" class="headerlink" title="什么是中文分词"></a>什么是中文分词</h2><p>与大部分印欧语系的语言不同，中文在词与词之间没有任何空格之类的显示标志指示词的边界。因此，中文分词是很多自然语言处理系统中的基础模块和首要环节。</p>
+<p>下面以<a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">jieba</a>的示例给读者一个对分词的感性认识。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">【全模式】: 我<span class="regexp">/ 来到/</span> 北京<span class="regexp">/ 清华/</span> 清华大学<span class="regexp">/ 华大/</span> 大学</span><br><span class="line"></span><br><span class="line">【精确模式】: 我<span class="regexp">/ 来到/</span> 北京/ 清华大学</span><br><span class="line"></span><br><span class="line">【新词识别】：他, 来到, 了, 网易, 杭研, 大厦</span><br><span class="line"></span><br><span class="line">【搜索引擎模式】： 小明, 硕士, 毕业, 于, 中国, 科学, 学院, 科学院, 中国科学院, 计算, 计算所, 后, 在, 日本, 京都, 大学, 日本京都大学, 深造</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="中文分词的方法和评价指标"><a href="#中文分词的方法和评价指标" class="headerlink" title="中文分词的方法和评价指标"></a>中文分词的方法和评价指标</h2><p>从20世纪80年代或更早的时候起，学者们研究了很多的分词方法，这些方法大致可以分为三大类：</p>
+<ul>
+<li>基于词表的分词方法<ul>
+<li>正向最大匹配法(forward maximum matching method, FMM)</li>
+<li>逆向最大匹配法(backward maximum matching method, BMM)</li>
+<li>N-最短路径方法</li>
+</ul>
+</li>
+<li>基于统计模型的分词方法<ul>
+<li>基于N-gram语言模型的分词方法</li>
+</ul>
+</li>
+<li>基于序列标注的分词方法<ul>
+<li>基于HMM的分词方法</li>
+<li>基于CRF的分词方法</li>
+<li>基于词感知机的分词方法</li>
+<li>基于深度学习的端到端的分词方法</li>
+</ul>
+</li>
+</ul>
+<p>在中文分词领域，比较权威且影响深远的评测有 <a href="http://sighan.cs.uchicago.edu/bakeoff2005/" target="_blank" rel="noopener">SIGHAN - 2nd International Chinese Word Segmentation Bakeoff</a>。它提供了2份简体中文和2份繁体中文的分词评测语料。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Corpus</th>
+<th>Charset</th>
+<th>Train Set Word Types/Counts</th>
+<th>Test Set Word Count</th>
+<th>OOV Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Academia Sinica</td>
+<td>zh-CHT</td>
+<td>141K/5.45M</td>
+<td>19K/122K</td>
+<td>0.046</td>
+</tr>
+<tr>
+<td>City University of Hong Kong</td>
+<td>zh-CHT</td>
+<td>69K/1.46M</td>
+<td>9K/41K</td>
+<td>0.074</td>
+</tr>
+<tr>
+<td>Peking University</td>
+<td>zh-CHS</td>
+<td>55K/1.11M</td>
+<td>13K/104K</td>
+<td>0.058</td>
+</tr>
+<tr>
+<td>Microsoft Research</td>
+<td>zh-CHS</td>
+<td>88K/2.37M</td>
+<td>13K/107K</td>
+<td>0.026</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Sighan中采用的评价指标包括：</p>
+<ul>
+<li>准确率(Precision)</li>
+<li>召回率(Recall)</li>
+<li>F-测度(F-measure)</li>
+<li>未登录词的召回率($R_{OOV}$)</li>
+<li>词典词的召回率($R_{IV}$)</li>
+</ul>
+<p>各指标计算公式如下:</p>
+<script type="math/tex; mode=display">Precision=\frac{WordCount(CorrectResults)}{WordCount(TrainSet)}</script><script type="math/tex; mode=display">Recall==\frac{WordCount(CorrectResults)}{WordCount(TestSet)}</script><script type="math/tex; mode=display">F1=\frac{2*P*R}{P+R}</script><p>根据<a href="http://thulac.thunlp.org/#%E4%BB%A3%E8%A1%A8%E5%88%86%E8%AF%8D%E8%BD%AF%E4%BB%B6%E7%9A%84%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94" target="_blank" rel="noopener">THULAC</a>，目前各分词工具在sighan上的评测结果如下：</p>
+<h3 id="msr-test"><a href="#msr-test" class="headerlink" title="msr_test"></a>msr_test</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Time</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F-Measure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LTP-3.2.0</td>
+<td>3.21s</td>
+<td>0.867</td>
+<td>0.896</td>
+<td>0.881</td>
+</tr>
+<tr>
+<td>ICTCLAS(2015版)</td>
+<td>0.55s</td>
+<td>0.869</td>
+<td>0.914</td>
+<td>0.891</td>
+</tr>
+<tr>
+<td>jieba(C++版)</td>
+<td>0.26s</td>
+<td>0.814</td>
+<td>0.809</td>
+<td>0.811</td>
+</tr>
+<tr>
+<td>THULAC_lite</td>
+<td>0.62s</td>
+<td>0.877</td>
+<td>0.899</td>
+<td>0.888</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="pku-test"><a href="#pku-test" class="headerlink" title="pku_test"></a>pku_test</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Time</th>
+<th>Precision</th>
+<th>Recall</th>
+<th>F-Measure</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LTP-3.2.0</td>
+<td>3.83s</td>
+<td>0.960</td>
+<td>0.947</td>
+<td>0.953</td>
+</tr>
+<tr>
+<td>ICTCLAS(2015版)</td>
+<td>0.53s</td>
+<td>0.939</td>
+<td>0.944</td>
+<td>0.941</td>
+</tr>
+<tr>
+<td>jieba(C++版)</td>
+<td>0.23s</td>
+<td>0.850</td>
+<td>0.784</td>
+<td>0.816</td>
+</tr>
+<tr>
+<td>THULAC_lite</td>
+<td>0.51s</td>
+<td>0.944</td>
+<td>0.908</td>
+<td>0.926</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="各分词方法的细节"><a href="#各分词方法的细节" class="headerlink" title="各分词方法的细节"></a>各分词方法的细节</h2><h3 id="正向最大匹配法-FMM"><a href="#正向最大匹配法-FMM" class="headerlink" title="正向最大匹配法(FMM)"></a>正向最大匹配法(FMM)</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我</td>
+<td>毕</td>
+<td>业</td>
+<td>于</td>
+<td>北</td>
+<td>京</td>
+<td>邮</td>
+<td>电</td>
+<td>⼤</td>
+<td>学</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>pos</th>
+<th>remain characters</th>
+<th>start character</th>
+<th>max matching</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>我毕业于北京邮电⼤学</td>
+<td>我</td>
+<td>我</td>
+</tr>
+<tr>
+<td>1</td>
+<td>毕业于北京邮电⼤学</td>
+<td>毕</td>
+<td>毕业</td>
+</tr>
+<tr>
+<td>3</td>
+<td>于北京邮电⼤学</td>
+<td>于</td>
+<td>于</td>
+</tr>
+<tr>
+<td>4</td>
+<td>北京邮电⼤学</td>
+<td>北</td>
+<td>北京邮电⼤学</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>正向最大匹配法，顾名思义，对于输入的一段文本从左至右、以贪心的方式切分出当前位置上长度最大的词。正向最大匹配法是基于词典的分词方法，其分词原理是：单词的颗粒度越大，所能表示的含义越确切。</p>
+<h3 id="负向最大匹配法-BMM"><a href="#负向最大匹配法-BMM" class="headerlink" title="负向最大匹配法(BMM)"></a>负向最大匹配法(BMM)</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>我</td>
+<td>毕</td>
+<td>业</td>
+<td>于</td>
+<td>北</td>
+<td>京</td>
+<td>邮</td>
+<td>电</td>
+<td>⼤</td>
+<td>学</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>pos</th>
+<th>remain characters</th>
+<th>start character</th>
+<th>max matching</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>我毕业于北京邮电⼤学</td>
+<td>北</td>
+<td>北京邮电大学</td>
+</tr>
+<tr>
+<td>3</td>
+<td>我毕业于</td>
+<td>于</td>
+<td>于</td>
+</tr>
+<tr>
+<td>1</td>
+<td>我毕业</td>
+<td>毕</td>
+<td>毕业</td>
+</tr>
+<tr>
+<td>0</td>
+<td>我</td>
+<td>我</td>
+<td>我</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>反向最大匹配法的基本原理与正向最大匹配法类似，只是分词顺序变为从右至左。容易看出，FMM或BMM对于一些有歧义的词处理能力一般。举个例子：<code>结婚的和尚未结婚的</code>，使用FMM很可能分成<code>结婚/的/和尚/未/结婚/的</code>；<code>为人民办公益</code>,使用BMM可能会分成<code>为人/民办/公益</code>。</p>
+<p>虽然在部分文献和软件实现中指出，由于中文的性质，反向最大匹配法优于正向最大匹配法。在成熟的工业界应用上几乎不会直接使用FMM、BMM作为分词模块的实现方法。</p>
+<h3 id="基于N-gram语言模型的分词方法"><a href="#基于N-gram语言模型的分词方法" class="headerlink" title="基于N-gram语言模型的分词方法"></a>基于N-gram语言模型的分词方法</h3><p>由于歧义的存在，一段文本存在多种可能的切分结果（切分路径），FMM、BMM使用机械规则的方法选择最优路径，而N-gram语言模型分词方法则是利用统计信息找出一条概率最大的路径。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_dag.png" alt="wordseg DAG"></p>
+<p>上图为<code>南京市长江大桥</code>的全切分有向无环图(DAG)。可以看到，可能的切分路径有：</p>
+<ul>
+<li>南京/市/长江/大桥</li>
+<li>南京/市/长江大桥</li>
+<li>南京市/长江/大桥</li>
+<li>南京市/长江大桥</li>
+<li>南京/市长/江/大桥</li>
+<li>南京/市长/江大桥</li>
+<li>南京市长/江/大桥</li>
+<li>南京市长/江大桥</li>
+<li>…</li>
+</ul>
+<p>假设随机变量$S$为一个汉字序列，$W$是$S$上所有可能的切分路径。对于分词，实际上就是求解使条件概率$P(W|S)$最大的切分路径$W^{*}$，即</p>
+<script type="math/tex; mode=display">W^{*}=\arg\max_\W P(W|S)</script><p>根据贝叶斯公式，</p>
+<script type="math/tex; mode=display">W^{*}=\arg\max_\W \frac{P(W)P(S|W)}{P(S)}</script><p>由于$P(S)$为归一化因子，$P(S|W)$恒为1，因此只需要求解$P(W)$。</p>
+<p>$P(W)$使用N-gram语言模型建模，定义如下(以Bi-gram为例)：</p>
+<script type="math/tex; mode=display">P(W)=P(w_{1}w_{2}\cdots w_{T})= P(w_{1})*P(w_{2}|w_{1})\cdots *P(w_{T}|w_{T-1}) =\prod_{t=1}^{T}\widehat{P}(w_{t}|w_{1}^{t-1})</script><p>至此，各切分路径的好坏程度(条件概率$P(W|S)$)可以求解。简单的，可以根据DAG枚举全路径，暴力求解最优路径；也可以使用动态规划的方法求解，<a href="https://github.com/fxsjy/jieba" target="_blank" rel="noopener">jieba</a>中不带HMM新词发现的分词，就是DAG + Uni-gram的语言模型 + 后向DP的方式进行的。</p>
+<h3 id="基于HMM的分词方法"><a href="#基于HMM的分词方法" class="headerlink" title="基于HMM的分词方法"></a>基于HMM的分词方法</h3><p>接下来介绍的几种分词方法都属于由字构词的分词方法，由字构词的分词方法思想并不复杂，它是将分词问题转化为字的分类问题（序列标注问题）。从某些层面讲，由字构词的方法并不依赖于事先编制好的词表，但仍然需要分好词的训练语料。</p>
+<p>规定每个字有4个词位：</p>
+<ul>
+<li>词首 B</li>
+<li>词中 M</li>
+<li>词尾 E</li>
+<li>单字成词 S</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>X</th>
+<th>我</th>
+<th>毕</th>
+<th>业</th>
+<th>于</th>
+<th>北</th>
+<th>京</th>
+<th>邮</th>
+<th>电</th>
+<th>⼤</th>
+<th>学</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Y</td>
+<td>S</td>
+<td>B</td>
+<td>E</td>
+<td>S</td>
+<td>B</td>
+<td>M</td>
+<td>M</td>
+<td>M</td>
+<td>M</td>
+<td>E</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由于HMM是一个生成式模型，X为观测序列，Y为隐序列。</p>
+<script type="math/tex; mode=display">P(X\ ,\ Y)=\prod_{t=1}^{T} P(y_{t}|y_{t-1})*P(x_{t}|y_{t})</script><p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_HMM_func.png" alt="wordseg HMM X Y"></p>
+<p>熟悉HMM的同学都知道，<a href="https://zh.wikipedia.org/zh-hans/隐马尔可夫模型" target="_blank" rel="noopener">HMM</a>有三类基本问题：</p>
+<ul>
+<li>预测(filter)：已知模型参数和某一特定输出序列，求最后时刻各个隐含状态的概率分布，即求 $P(x(t)\ |\ y(1),\cdots,y(t))$。通常使用前向算法解决.</li>
+<li>平滑(smoothing)：已知模型参数和某一特定输出序列，求中间时刻各个隐含状态的概率分布，即求 $P(x(k)\ |\ y(1),\cdots,y(t)), k&lt;t$。通常使用forward-backward 算法解决.</li>
+<li>解码(most likely explanation): 已知模型参数，寻找最可能的能产生某一特定输出序列的隐含状态的序列. 即求 $P([x(1)\cdots x(t)]\ |\ [y(1)\cdots ,y(t)])$, 通常使用Viterbi算法解决.</li>
+</ul>
+<p>分词就对应着HMM的解码问题，模型参数(转移矩阵，发射矩阵)可以使用统计方法计算得到，原始文本为输出序列，词位是隐状态序列，使用Viterbi算法求解即可。具体方法请参照<code>参考资料#2</code>。</p>
+<p>jieba的新词模式就是使用HMM识别未登录词的，具体做法是：针对不在词表中的一段子文本，使用HMM分词，并把HMM的分词结果加入到原始分词结果中。</p>
+<h3 id="基于CRF的分词方法"><a href="#基于CRF的分词方法" class="headerlink" title="基于CRF的分词方法"></a>基于CRF的分词方法</h3><p>与HMM不同，<a href="https://en.wikipedia.org/wiki/Conditional_random_field" target="_blank" rel="noopener">CRF</a>是一种判别式模型，CRF通过定义条件概率$P(Y|X)$来描述模型。基于CRF的分词方法与传统的分类模型求解很相似，即给定feature(字级别的各种信息)输出label(词位)。</p>
+<script type="math/tex; mode=display">score(l | s) = \sum_{j = 1}^m \sum_{i = 1}^n \lambda_j f_j(s, i, l_i, l_{i-1})</script><p>简单来说，分词所使用的是Linear-CRF，它由一组特征函数组成，包括权重$\lambda$和特征函数$f$，特征函数$f$的输入是整个句子$s$、当前pos$i$、前一个词位$l<em>{i-1}$，当前词位$l</em>{i}$。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/wordseg_CRF_func.png" alt="wordseg CRF X Y"></p>
+<p>引自<code>参考资料#3</code>，以CRF在词性标注上的应用，给大家一个特征函数的感性认识。</p>
+<ul>
+<li>$f<em>1(s, i, l_i, l</em>{i-1}) = 1$，如果$l_i$是副词且第i个单词以”-ly”结尾；否则$f_1=0$。该特征函数实际上描述了英语中副词“常常以-ly结尾”的特点，对应的权重$\lambda_1$应该是个较大的正数。</li>
+<li>$f<em>4(s, i, l_i, l</em>{i-1}) = 1$，如果$l<em>{i-1}$是介词且$l</em>{i}$也是介词，否则$f_4=0$。对应的权重$\lambda_4$是个较大的负数，表明英语语法中介词一般不连续出现。</li>
+</ul>
+<p>感性地说，CRF的一组特征函数其实就对应着一组判别规则(特征函数)，并且该判别规则有不同的重要度(权重)。在CRF的实现中，特征函数一般为二值函数，其量纲由权重决定。在开源实现<a href="https://taku910.github.io/crfpp/" target="_blank" rel="noopener">CRF++</a>中，使用者需要规定一系列特征模板，然后CRF++会自动生成特征函数并训练、收敛权重。</p>
+<p>与HMM比，CRF存在以下优点：</p>
+<ul>
+<li>CRF可以使用输入文本的全局特征，而HMM只能看到输入文本在当前位置的局部特征</li>
+<li>CRF是判别式模型，直接对序列标注建模；HMM则引入了不必要的先验信息</li>
+</ul>
+<h3 id="基于深度学习的端到端的分词方法"><a href="#基于深度学习的端到端的分词方法" class="headerlink" title="基于深度学习的端到端的分词方法"></a>基于深度学习的端到端的分词方法</h3><p>最近，基于深度神经网络的序列标注算法在词性标注、命名实体识别问题上取得了优秀的进展。词性标注、命名实体识别都属于序列标注问题，这些端到端的方法可以迁移到分词问题上，免去CRF的特征模板配置问题。但与所有深度学习的方法一样，它需要较大的训练语料才能体现优势。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/BiLSTM-CRF.png" alt="BiLSTM-CRF"></p>
+<p>BiLSTM-CRF(<code>参考资料#4</code>)的网络结构如上图所示，输入层是一个embedding层，经过双向LSTM网络编码，输出层是一个CRF层。下图是BiLSTM-CRF各层的物理含义，可以看见经过双向LSTM网络输出的实际上是当前位置对于各词性的得分，CRF层的意义是对词性得分加上前一位置的词性概率转移的约束，其好处是引入一些语法规则的先验信息。</p>
+<p>从数学公式的角度上看：</p>
+<script type="math/tex; mode=display">S(X, y)=\sum_{i=0}^{n}A_{y_i,y_{i+1}}+\sum_{i=1}^{n}P_{i,y_i}</script><p>其中，A是词性的转移矩阵，P是BiLSTM网络的判别得分。</p>
+<script type="math/tex; mode=display">P(y|X)=\frac{e^{s(X,y)}}{\sum_{\widetilde{y}\in Y_{x}}e^{s(X,y)}}</script><p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/dive_into_BiLSTM-CRF.png" alt="Dive into BiLSTM-CRF"></p>
+<p>因此，训练过程就是最大化正确词性序列的条件概率$P(y|X)$。</p>
+<p>类似的工作还有LSTM-CNNs-CRF(<code>参考资料#5</code>)。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/LSMT-CNNs-CRF_part1.png" alt="LSMT-CNNs-CRF_part1"></p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/LSMT-CNNs-CRF_part2.png" alt="LSMT-CNNs-CRF_part2"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ol>
+<li>成庆, 宗. 统计自然语言处理[M]. 清华大学出版社, 2008.</li>
+<li><a href="http://www.52nlp.cn/itenyh%E7%89%88-%E7%94%A8hmm%E5%81%9A%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D%E4%B8%80%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%87%86%E5%A4%87" target="_blank" rel="noopener">Itenyh版-用HMM做中文分词</a></li>
+<li><a href="http://blog.echen.me/2012/01/03/introduction-to-conditional-random-fields/" target="_blank" rel="noopener">Introduction to Conditional Random Fields</a></li>
+<li>Lample G, Ballesteros M, Subramanian S, et al. Neural Architectures for Named Entity Recognition[J]. 2016:260-270.</li>
+<li>Ma X, Hovy E. End-to-end sequence labeling via bi-directional lstm-cnns-crf[J]. arXiv preprint arXiv:1603.01354, 2016.</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/18/我的2017年度读书报告/" rel="next" title="我的2017年度读书报告">
+                <i class="fa fa-chevron-left"></i> 我的2017年度读书报告
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/28/基于统计信息的新词挖掘实践/" rel="prev" title="基于统计信息的新词挖掘实践">
+                基于统计信息的新词挖掘实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是中文分词"><span class="nav-number">1.</span> <span class="nav-text">什么是中文分词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文分词的方法和评价指标"><span class="nav-number">2.</span> <span class="nav-text">中文分词的方法和评价指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#msr-test"><span class="nav-number">2.1.</span> <span class="nav-text">msr_test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pku-test"><span class="nav-number">2.2.</span> <span class="nav-text">pku_test</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各分词方法的细节"><span class="nav-number">3.</span> <span class="nav-text">各分词方法的细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#正向最大匹配法-FMM"><span class="nav-number">3.1.</span> <span class="nav-text">正向最大匹配法(FMM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#负向最大匹配法-BMM"><span class="nav-number">3.2.</span> <span class="nav-text">负向最大匹配法(BMM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于N-gram语言模型的分词方法"><span class="nav-number">3.3.</span> <span class="nav-text">基于N-gram语言模型的分词方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于HMM的分词方法"><span class="nav-number">3.4.</span> <span class="nav-text">基于HMM的分词方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于CRF的分词方法"><span class="nav-number">3.5.</span> <span class="nav-text">基于CRF的分词方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于深度学习的端到端的分词方法"><span class="nav-number">3.6.</span> <span class="nav-text">基于深度学习的端到端的分词方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">4.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="IFTTT,科学上网," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我用IFTTT干了什么 借助IFTTT，我把新浪微博、instagram上的新动态自动更新到Facebook上。">
+<meta name="keywords" content="IFTTT,科学上网">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用IFTTT跨越墙里墙外，打通全社交平台">
+<meta property="og:url" content="http://lujiaying.github.io/2015/07/26/使用IFTTT跨越墙里墙外，打通全社交平台/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="我用IFTTT干了什么 借助IFTTT，我把新浪微博、instagram上的新动态自动更新到Facebook上。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_instagram_then_facebook.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_pocket_then_onenote.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2.png">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example3_wechat.jpg">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用IFTTT跨越墙里墙外，打通全社交平台">
+<meta name="twitter:description" content="我用IFTTT干了什么 借助IFTTT，我把新浪微博、instagram上的新动态自动更新到Facebook上。">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2015/07/26/使用IFTTT跨越墙里墙外，打通全社交平台/"/>
+
+
+
+
+
+  <title>使用IFTTT跨越墙里墙外，打通全社交平台 | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2015/07/26/使用IFTTT跨越墙里墙外，打通全社交平台/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用IFTTT跨越墙里墙外，打通全社交平台</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-07-26T21:53:30+00:00">
+                2015-07-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt.png" alt="ifttt"></p>
+<h1 id="我用IFTTT干了什么"><a href="#我用IFTTT干了什么" class="headerlink" title="我用IFTTT干了什么"></a>我用IFTTT干了什么</h1><ol>
+<li><p>借助<a href="https://ifttt.com" target="_blank" rel="noopener">IFTTT</a>，我把新浪微博、instagram上的新动态自动更新到Facebook上。<br><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_instagram_then_facebook.png" alt="If instagram then facebook"></p>
+<a id="more"></a>
+<p>效果如下：<br><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example1.png" alt="Cool"></p>
+</li>
+<li><p>把<a href="https://getpocket.com" target="_blank" rel="noopener">Pocket</a>上的加星文章同步到Onenote，并分享到新浪微博和Facebook。<br><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/if_pocket_then_onenote.png" alt="If Pocket then Onenote"><br>效果如下：<br><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example2.png" alt="Awesome~"></p>
+</li>
+</ol>
+<p>我的终极设想是以新浪微博作为中心，同步所有社交网络上的动态：</p>
+<ul>
+<li>豆瓣上看过的书、电影</li>
+<li>知乎上回答的问题</li>
+<li>instagram 上的照片</li>
+<li>Pocket上的星标文章</li>
+<li>简书上写的文章</li>
+</ul>
+<p>这样，我们就可以在一种社交工具上看到自己全方位的生活动态，而不再是分离割裂的状态：微博上全是生活的聊骚，豆瓣上全是电影的评论和评分。</p>
+<p>此外，只要设置好微博和Facebook的同步，所有微博的动态都可以同步更新在Facebook上。万一哪天墙塌了，就可以不必搬运自己过去的状态，轻松切换到Facebook上，不丢失宝贵的生活记录。</p>
+<h1 id="IFTTT介绍"><a href="#IFTTT介绍" class="headerlink" title="IFTTT介绍"></a>IFTTT介绍</h1><p><a href="https://ifttt.com" target="_blank" rel="noopener">IFTTT</a>的用法非常简单，基本上5分钟就可以上手。</p>
+<p>顾名思义，IFTTT是 <code>if this then that</code>的缩写。IFTTT的基本元素被称为食谱<code>recipe</code>，而一条食谱主要由一个触发源<code>this</code>和一个动作<code>that</code>组成。触发源就是你设定的该食谱的发生时机，动作就是该食谱触发后的行为。<br>以一个经典的 IFTTT recipe  － “如果明天下雨就给我发一条提醒短信”为例， 触发源就是<code>明天下雨</code>，动作就是<code>发一条提醒短信</code>。一旦该条食谱设置好之后，每次下雨前你都会收到来自IFTTT的温馨短信哦～</p>
+<p>在IFTTT的网站上有大量实用的 recipes 供大家参考使用。你也可以发挥自己的创意，创造有趣的 recipe 分享给别人，recipe 越有趣，就能收到越多的赞。</p>
+<h1 id="IFTTT如何翻墙，科学上网"><a href="#IFTTT如何翻墙，科学上网" class="headerlink" title="IFTTT如何翻墙，科学上网"></a>IFTTT如何翻墙，科学上网</h1><p>感谢<a href="http://weibo.com/u/2417830862" target="_blank" rel="noopener">赵宇豪</a>提供的服务<a href="http://ifweixin.com/help" target="_blank" rel="noopener">IF微信</a>，只需简单的几个步骤，就可以在微信上发布Facebook的新状态。</p>
+<blockquote>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/ifttt_example3_wechat.jpg" alt="借助微信同步墙外社区"></p>
+</blockquote>
+<h1 id="IFTTT的脑洞"><a href="#IFTTT的脑洞" class="headerlink" title="IFTTT的脑洞"></a>IFTTT的脑洞</h1><p><a href="http://www.zhihu.com/question/21812904" target="_blank" rel="noopener">知乎上的问题 - IFTTT有哪些有趣的玩法</a></p>
+<blockquote>
+<p>if 明天下雨，then 发短信给自己的心仪女友：“亲爱的，明天出门带伞，我是你的阳光”。<br>if 某人（比如你暗恋的人）发了条微博，那么通过邮件通知你（实时监控必备啊）。</p>
+</blockquote>
+<p>如果你有什么关于IFTTT的好创意，请留言告诉我哦。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IFTTT/" rel="tag"># IFTTT</a>
+          
+            <a href="/tags/科学上网/" rel="tag"># 科学上网</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/24/芬兰居留权攻略/" rel="next" title="芬兰居留权攻略">
+                <i class="fa fa-chevron-left"></i> 芬兰居留权攻略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/06/孤独也是一种正能量——芬兰留学感想/" rel="prev" title="孤独也是一种正能量——芬兰留学感想">
+                孤独也是一种正能量——芬兰留学感想 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#我用IFTTT干了什么"><span class="nav-number">1.</span> <span class="nav-text">我用IFTTT干了什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IFTTT介绍"><span class="nav-number">2.</span> <span class="nav-text">IFTTT介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IFTTT如何翻墙，科学上网"><span class="nav-number">3.</span> <span class="nav-text">IFTTT如何翻墙，科学上网</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IFTTT的脑洞"><span class="nav-number">4.</span> <span class="nav-text">IFTTT的脑洞</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

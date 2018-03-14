@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="word2vec,词向量," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="神经网络掀起了人工智能的浪潮，深度学习的热度也逐步盖过了机器学习。深度学习(Deep Learning)并不是一个新的概念，早在上个世纪七八十年代，深度神经网络(Deep Neural Netword)就诞生了。但由于数据集、运算能力的限制，深度学习经历了很长的低潮期，直到最近才在语音和图像应用上产生了突破性进展。不同于语音和图像领域，深度学习在自然语言处理(NLP)领域还没能表现出全面领先于传统">
+<meta name="keywords" content="word2vec,词向量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="词向量的前世今生">
+<meta property="og:url" content="http://lujiaying.github.io/2017/10/22/词向量的前世今生/index.html">
+<meta property="og:site_name" content="卢嘉颖的博客">
+<meta property="og:description" content="神经网络掀起了人工智能的浪潮，深度学习的热度也逐步盖过了机器学习。深度学习(Deep Learning)并不是一个新的概念，早在上个世纪七八十年代，深度神经网络(Deep Neural Netword)就诞生了。但由于数据集、运算能力的限制，深度学习经历了很长的低潮期，直到最近才在语音和图像应用上产生了突破性进展。不同于语音和图像领域，深度学习在自然语言处理(NLP)领域还没能表现出全面领先于传统">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/audio_image_text.jpg">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/vec_space.jpg">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/time_func.jpg">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/NNLM_struct.jpg">
+<meta property="og:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/word2vec_nn_struct.jpg">
+<meta property="og:updated_time" content="2018-03-14T02:12:07.856Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="词向量的前世今生">
+<meta name="twitter:description" content="神经网络掀起了人工智能的浪潮，深度学习的热度也逐步盖过了机器学习。深度学习(Deep Learning)并不是一个新的概念，早在上个世纪七八十年代，深度神经网络(Deep Neural Netword)就诞生了。但由于数据集、运算能力的限制，深度学习经历了很长的低潮期，直到最近才在语音和图像应用上产生了突破性进展。不同于语音和图像领域，深度学习在自然语言处理(NLP)领域还没能表现出全面领先于传统">
+<meta name="twitter:image" content="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/audio_image_text.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://lujiaying.github.io/2017/10/22/词向量的前世今生/"/>
+
+
+
+
+
+  <title>词向量的前世今生 | 卢嘉颖的博客</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-78149472-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?85430e02a4a2e7c1f6ab563a6508d184";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">卢嘉颖的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lujiaying.github.io/2017/10/22/词向量的前世今生/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="卢嘉颖">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="卢嘉颖的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">词向量的前世今生</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-22T22:02:53+00:00">
+                2017-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>神经网络掀起了人工智能的浪潮，深度学习的热度也逐步盖过了机器学习。深度学习(Deep Learning)并不是一个新的概念，早在上个世纪七八十年代，深度神经网络(Deep Neural Netword)就诞生了。但由于数据集、运算能力的限制，深度学习经历了很长的低潮期，直到最近才在语音和图像应用上产生了突破性进展。不同于语音和图像领域，深度学习在自然语言处理(NLP)领域还没能表现出全面领先于传统统计机器学习方法的能力。不过，目前已有的一些研究也展露了深度学习在NLP应用上的潜力，词向量(word embedding)正是其中最基本也最广泛应用的。词向量目前常见的应用有：</p>
+<a id="more"></a>
+<ol>
+<li>使用训练出的词向量作为输入特征，提升现有系统，如应用在情感分析、词性标注、语言翻译等神经网络中的输入层。</li>
+<li>直接从语言学的角度对词向量进行应用，如使用向量的距离表示词语相似度、query相关性等。</li>
+</ol>
+<p>本文试图以词向量的发展为脉络，从早期Bengio的Neural Probabilistic Language Models[1]，到Mikolov关于Word2Vec的两篇论文Efficient Estimation of Word Representations in Vector Space[2]和Distributed Representations of Words and Phrases and their Compositionality[3]，介绍涉及的网络结构、公式原理和开源工具。</p>
+<h2 id="Why-Word-Embedding"><a href="#Why-Word-Embedding" class="headerlink" title="Why Word Embedding?"></a>Why Word Embedding?</h2><p>机器学习模型要求输入是数字，因此自然语言处理问题要转化为机器学习的问题首先需要把自然语言数学符号化。NLP早期最常见的方法是One-hot Representation，这种方法把词转化成一个很长的稀疏向量，向量的维度等于词表大小，在向量中只有一个维度是1，其他都是0。One-hot稀疏表示法简洁，但也导致任意两个词之间都是孤立的。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/audio_image_text.jpg" alt="Represents of audio, image and text"></p>
+<p>语音、图像数据可以编码为高维度、稠密的向量，并且编码方式会影响语音、图像任务的性能。基于此，Hinton、Bengio、Milokov等提出了自然语言的Distributed representation，这种表示法可以把词映射到连续实数向量空间，且相似词在该空间中位置相近。有两种常见的途径获得Distributed representation，一种是 count-based方法( Latent Semantic Analysis)，一种是predictive方法（neural probabilistic language models）。简单来说，Count-based方法在大语料集上计算词语的共现统计特征，然后把这些统计特征映射到低维空间成为低维、稠密向量；Predictive方法训练语言模型，直接尝试从学习词向量（是模型的参数）来通过邻居词估计目标词。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/vec_space.jpg" alt="Words in vector space"></p>
+<h2 id="前世"><a href="#前世" class="headerlink" title="前世"></a>前世</h2><p>Word2Vec算法使Distributed representation真正受到学术界、工业界的认可，它属于predictive方法，传承自Bengio的”Neural Probabilistic Language Models”[1]。NNLM是Distributed representation for words早期的重要工作，Word2Vec的很多方面受到该篇论文启发。文章提出了一个3层的网络结构(embedding输入层，tanh隐层，softmax输出层)，通过最大化词序列的联合概率来学习word embedding。</p>
+<h3 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h3><p>NNLM的目标函数是给定上文时下一个词的条件概率，该目标函数源于统计语言模型(statistical model of language)。一般地，统计语言模型将一个句子(由多个词构成的序列)的出现概率建模为：</p>
+<script type="math/tex; mode=display">\widehat{P}(w_{1}^{T})= \prod_{t=1}^{T}\widehat{P}(w_{t}|w_{1}^{t-1})</script><p>计算统计语言模型的句子概率的计算复杂度是$O(N^T)$，N为语料中词的个数(vocabulary size，中文一般是2万～4万)，T为句子长度(一般小于20)。</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/time_func.jpg" alt="Time complexity of N^T"></p>
+<p>统计语言模型的计算复杂度太高，在早期实践中采用的是简化版本n-gram语言模型。n-gram模型可直接通过统计词频来计算，计算复杂度 - ，n一般取值2、3、4。n-gram模型的缺点是需要事先保存所有的概率值，工程上还涉及到对稀疏组合平滑化的操作。</p>
+<script type="math/tex; mode=display">\widehat{P}(w_{t}|w_{1}^{t-1})\approx \widehat{P}(w_{t}|w_{t-n+1}^{t-1})</script><p>使用机器学习的观点看待求解给定上下文求下一个词的条件概率，目标函数为：</p>
+<script type="math/tex; mode=display">\widehat{P}(w|Context(w))=F(w,Context(w),\theta)</script><p>使用对数最大似然算法(Maximum Log-Likelihood Esimation)进行参数估计：</p>
+<script type="math/tex; mode=display">L(\theta)=\sum_{w\in C}log p(w|Context(w))</script><p>因此，通过选择合适的模型可以减小参数 - 的尺寸。事实上，Word2Vec受到广泛认可正是因为它在大幅提高了模型训练速度的同时，保证了较好的模型精度。从统计语言模型到NNLM，再到Word2Vec的过程也是一个以精度为约束提高训练速度的过程。</p>
+<h3 id="NNLM"><a href="#NNLM" class="headerlink" title="NNLM"></a>NNLM</h3><p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/NNLM_struct.jpg" alt="NNLM architecture"></p>
+<p>上图是NNLM的网络结构图，输入是target word的context(前n个词在矩阵C中的index，等价于在vocabulary中的index)，输出是一个长度为|V|的向量，其中第i维代表target word为i(i同样是词在vocabulary中的index)在当前context下的条件概率。矩阵C是NNLM的关键部分，论文中原文是：</p>
+<blockquote>
+<p>In practice, C is represented by a |V| * m matrix of free parameters. C being shared across all the words in the context.</p>
+</blockquote>
+<p>实际上，C矩阵存储的就是语料中所有词的词向量，它的行数|V|是语料中词的个数，列数m为词向量的长度。上图g代表的是神经网络的映射(mapping)，由图可知它包括了tanh层和softmax层。NNLM的目标函数为：</p>
+<script type="math/tex; mode=display">\widehat{P}(w_{t}|w_{t-n+1}^{t-1})=\frac{e^{y_{w_{t}}}}{\sum_{i}e^{y_{i}}},\ where\ y=b+Wx+Utanh(d+Hx)</script><p>其中，b是output层的bias；W是当词向量和output层有直接连接(direct connections)时的weight，对应NNLM网络结构图中的虚线，一般为0；H、d是tanh层(hidden层)的weight、bias；U是tanh层到output层的weight。(注意，隐藏层可以有多个神经元)</p>
+<p>损失函数为：$L(\theta)=-\frac{1}{T}\sum<em>{t}logf(w</em>{t},w<em>{t-1},…,w</em>{t-n+1};\theta)+R(\theta)$， 其中 $R(\theta)$是正则惩罚项。</p>
+<p>因此，$\theta=(b,d,W,U,H,C)$，对应的计算复杂度为： </p>
+<script type="math/tex; mode=display">|V|(1 + nm + h) + h(1 + (n - 1)m)=O(N(nm+h))</script><p>其中，N为语料中词的个数，h为神经网络中隐藏层神经元的个数，n为context window的大小，m为词向量的维度。由此可见，NNLM将模型训练的计算复杂度由$O(N^n)$降低到$O(N*nm)$。论文中提到，在Associated Press 新闻数据集(1400w words)，使用NNLM在40个CPU上训练5个epoch耗时约3周。</p>
+<h2 id="今生"><a href="#今生" class="headerlink" title="今生"></a>今生</h2><p>2013年word2vec横空出世，背后的原理在Mikolov的两篇论文”Efficient Estimation of Word Representations in VectorSpace”[2], “Distributed Representations of Words and Phrases and their Compositionality”[3]中有详细的介绍。</p>
+<p>论文[2]主要提出了CBOW和Skip-gram两种网络结构来训练词向量，并使用语义word relationship test和语法word relationship两种测试集来评估模型的有效性。</p>
+<p>语义word relationship：$V(Athens)-V(Greece)+V(Norway)=V(Oslo)$</p>
+<p>语法word relationship：$V(apparent)-V(apparently)+V(rapid)=V(rapidly)$</p>
+<p><img src="http://7xkdra.com1.z0.glb.clouddn.com/image/blog/word2vec/word2vec_nn_struct.jpg" alt="Word2vec model architectures"></p>
+<p>论文[3]提出了一些方法拓展CBOW和Skip-gram(为主)的词向量质量和训练速度，主要有：subsampling of frequent words；hierarchial softmax、negative sampling。Mikolov还指出Word2Vec的主要缺陷是无法感知语序和无法表达习惯用语(idiomatic phrases，即由若干个单词组成的约定俗成的短语,如 NewYork)，对于idiomatic phrases，文中提出了一种简单的方法使得其词向量可训练(短语作为一个整体去训练)。</p>
+<p>关于word2vec的数学原理请参考<a href="http://blog.csdn.net/itplus/article/details/37969519" target="_blank" rel="noopener">word2vec中的数学原理详解</a>，讲得很详细也很透彻。</p>
+<p>延续上文的思路，从目标函数和计算复杂度的角度看word2vec的发展。</p>
+<p>CBOW的目标函数是：</p>
+<script type="math/tex; mode=display">\widehat{P}(w_{t}|w_{c})=\frac{e^{v_{w_{t}}^{T}v_{w_{c}}}}{\sum_{w=1}^{N}{v_{w}^{T}v_{w_{c}}}},\ where\ v_{w_{c}}=\sum_{i\in context(w_{t})}C(w_{i})</script><p>损失函数是：</p>
+<script type="math/tex; mode=display">L(\theta)=-\frac{1}{T}\sum_{t}log\ \widehat P(w_{t}|w_{c})+R(\theta)</script><p>计算复杂度是：</p>
+<script type="math/tex; mode=display">nm+mlog_{2}(N)=O(mlog_{2}(N))</script><blockquote>
+<p>论文原文 $N\times D+D\times log_{2}(V)$</p>
+</blockquote>
+<p>上式中N为语料中词的个数，N为语料中词的个数。</p>
+<p>Skip-gram的目标函数是：</p>
+<script type="math/tex; mode=display">\prod_{-c\leq j\leq c, j\ne t}\widehat{P}(w_{j}|w_{t})=\frac{e^{v_{w_{j}}^{T}v_{w_{t}}}}{\sum_{w=1}^{N}{v_{w}^{T}v_{w_{t}}}}</script><p>损失函数是：</p>
+<script type="math/tex; mode=display">L(\theta)=-\frac{1}{T}\sum_{t}\sum_{-c\leq j\leq c, j\ne t}log\ \widehat{P}(w_{j}|w_{t})+R(\theta)</script><p>计算复杂度是：</p>
+<script type="math/tex; mode=display">n(m+nlog_{2}(N))=O(nmlog_{2}(N))</script><blockquote>
+<p>论文原文 $C\times (D+D\times log_{2}(V))$</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>NNLM到word2vec的发展使得计算复杂度由O(N)的<strong>线性级降低到对数级</strong>。</p>
+<p>目前有很多开源工具提供词向量训练的功能:</p>
+<ul>
+<li>fasttext: <a href="https://github.com/facebookresearch/fastText" target="_blank" rel="noopener">facebookresearch/fastText</a>, PS: fasttext是mikolov跳槽到facebook后开发的。</li>
+<li>gensim: <a href="https://radimrehurek.com/gensim/" target="_blank" rel="noopener">gensim: topic modelling for humans</a></li>
+</ul>
+<p>使用主流的深度学习框架训练词向量也并不困难：</p>
+<ul>
+<li>tensorflow的官方教程：<a href="https://www.tensorflow.org/tutorials/word2vec" target="_blank" rel="noopener">Vector Representations of Words Tutorial</a></li>
+<li>Pytorch的官方教程：Word Embeddings: <a href="http://pytorch.org/tutorials/beginner/nlp/word_embeddings_tutorial.html#sphx-glr-beginner-nlp-word-embeddings-tutorial-py" target="_blank" rel="noopener">Encoding Lexical Semantics</a></li>
+</ul>
+<h2 id="未来"><a href="#未来" class="headerlink" title="未来"></a>未来</h2><p>自从2013年Mikolov出词向量的概念后，NLP领域仿佛一下子进入了embedding的世界，Sentence2Vec、Doc2Vec、Everything2Vec。另一方面，研究人员也尝试使用其他的方法生成词向量，比如斯坦福NLP小组提出的Global Vectors for Word Representation 。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>[1] Bengio Y, Schwenk H, Senécal J S, et al. Neural Probabilistic Language Models[J]. Journal of Machine Learning Research, 2003, 3(6):1137-1155.</p>
+<p>[2] Mikolov T, Chen K, Corrado G, et al. Efficient Estimation of Word Representations in Vector Space[J]. Computer Science, 2013.</p>
+<p>[3] Mikolov T, Sutskever I, Chen K, et al. Distributed representations of words and phrases and their compositionality[C]// International Conference on Neural Information Processing Systems. Curran Associates Inc. 2013:3111-3119.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/word2vec/" rel="tag"># word2vec</a>
+          
+            <a href="/tags/词向量/" rel="tag"># 词向量</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/15/MovieTaster-使用Item2Vec做电影推荐/" rel="next" title="MovieTaster-使用Item2Vec做电影推荐">
+                <i class="fa fa-chevron-left"></i> MovieTaster-使用Item2Vec做电影推荐
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/31/2017年总结-生活是永恒的沉重的努力/" rel="prev" title="2017年总结-生活是永恒的沉重的努力">
+                2017年总结-生活是永恒的沉重的努力 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpeg"
+                alt="卢嘉颖" />
+            
+              <p class="site-author-name" itemprop="name">卢嘉颖</p>
+              <p class="site-description motion-element" itemprop="description">Enjoy life~</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/lujiaying" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:lujiaying93@foxmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/lujiaying" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://twitter.com/LuJiaying_AI" target="_blank" title="Twitter">
+                    
+                      <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://jayveehe.github.io/" title="Javee's Blog" target="_blank">Javee's Blog</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://wangzi6147.github.io/" title="Wangzi's Blog" target="_blank">Wangzi's Blog</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-Word-Embedding"><span class="nav-number">1.</span> <span class="nav-text">Why Word Embedding?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前世"><span class="nav-number">2.</span> <span class="nav-text">前世</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景知识"><span class="nav-number">2.1.</span> <span class="nav-text">背景知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NNLM"><span class="nav-number">2.2.</span> <span class="nav-text">NNLM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#今生"><span class="nav-number">3.</span> <span class="nav-text">今生</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">3.1.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未来"><span class="nav-number">4.</span> <span class="nav-text">未来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">5.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">卢嘉颖</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
